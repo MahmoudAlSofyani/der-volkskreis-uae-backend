@@ -7,8 +7,18 @@ datasource db {
     url      = "mysql://root:root@localhost:3306/test_dvu_db"
 }
 
+// model User {
+//     email String  @unique
+//     id    Int     @id @default(autoincrement())
+//     name  String?
+// }
+
 model User {
-    email String  @unique
-    id    Int     @id @default(autoincrement())
-    name  String?
+    id                  String @id @default(uuid())
+    firstName           String
+    lastName            String
+    emailAddress        String
+    mobileNumber        String
+    password            String
+    authenticationToken String
 }
