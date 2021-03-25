@@ -27,5 +27,21 @@ exports.userValidator = (methodName) => {
           .notEmpty(),
       ];
     }
+    case "searchUser": {
+      return [
+        check("userId").exists().withMessage("User ID is required").notEmpty(),
+      ];
+    }
+    case "deleteUser": {
+      return [
+        check("userId").exists().withMessage("User ID is required").notEmpty(),
+      ];
+    }
+    case "updateUser": {
+      return [
+        check("emailAddress").isEmail().withMessage("Invalid email").optional(),
+        check("mobileNumber").optional(),
+      ];
+    }
   }
 };
