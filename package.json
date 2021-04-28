@@ -8,6 +8,7 @@
     "migrate": "npx prisma migrate dev --name init"
   },
   "dependencies": {
+    "@paljs/plugins": "^3.0.1",
     "@prisma/client": "^2.19.0",
     "bcrypt": "^5.0.1",
     "cookie-parser": "~1.4.4",

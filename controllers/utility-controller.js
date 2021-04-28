@@ -1,0 +1,22 @@
+const { PrismaClient } = require("@prisma/client");
+const { generateError, generatDefaultError } = require("../helpers/common");
+const prisma = new PrismaClient();
+
+exports.addNewCarModel = async (req, res, next) => {
+  try {
+    const { name } = req.body;
+    console.log(name);
+
+    const carModel = await prisma.carModel.create({
+      data: { name },
+    });
+
+    if (carModel) {
+      res.status(200).send({ msg: "Car model added successfully" });
+    } else {
+      generateError("Failed to add car model", req, next);
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};

@@ -1,8 +1,8 @@
 const { check } = require("express-validator");
 
-exports.userValidator = (methodName) => {
+exports.membersValidator = (methodName) => {
   switch (methodName) {
-    case "addNewUser": {
+    case "addNewMember": {
       return [
         check("firstName")
           .exists()
@@ -27,17 +27,23 @@ exports.userValidator = (methodName) => {
           .notEmpty(),
       ];
     }
-    case "searchUser": {
+    case "searchMember": {
       return [
-        check("userId").exists().withMessage("User ID is required").notEmpty(),
+        check("searchQuery")
+          .exists()
+          .withMessage("Search query is required")
+          .notEmpty(),
       ];
     }
-    case "deleteUser": {
+    case "deleteMember": {
       return [
-        check("userId").exists().withMessage("User ID is required").notEmpty(),
+        check("memberId")
+          .exists()
+          .withMessage("Member ID is required")
+          .notEmpty(),
       ];
     }
-    case "updateUser": {
+    case "updateMember": {
       return [
         check("emailAddress").isEmail().withMessage("Invalid email").optional(),
         check("mobileNumber").optional(),
