@@ -20,6 +20,7 @@ const publicAttributes = {
   updatedAt: false,
   cars: true,
   roles: true,
+  events: true,
 };
 
 exports.addNewMember = async (req, res, next) => {
@@ -68,9 +69,11 @@ exports.addNewMember = async (req, res, next) => {
     if (_newMember) {
       return res.status(200).send({ message: "Account created successfully!" });
     } else {
-      return res.status(500).send({
-        error: "There was an issue creating your account. Please try again",
-      });
+      generateError(
+        "Failed to create account, please try again later",
+        req,
+        next
+      );
     }
   } catch (err) {
     generatDefaultError(err, req, next);
@@ -169,12 +172,8 @@ exports.searchMember = async (req, res, next) => {
       select: publicAttributes,
     });
 
-    if (member) {
-      if (member.length > 0) {
-        res.status(200).send(member);
-      } else {
-        res.status(200).send({ msg: "No results" });
-      }
+    if (member && member.length > 0) {
+      res.status(200).send(member);
     } else {
       generateError("No results", req, next);
     }
@@ -229,6 +228,6 @@ exports.updateMemberRoles = async (req, res, next) => {
     }
   } catch (err) {
     // console.log(err);
-    return res.status(500).send({ err });
+    generatDefaultError(err, req, next);
   }
 };
