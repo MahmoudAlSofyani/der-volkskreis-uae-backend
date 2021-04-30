@@ -5,11 +5,15 @@ const {
   editAnnouncement,
   deleteAnnouncement,
 } = require("../controllers/announcements-controller");
+const {
+  verifyIsAdmin,
+  verifyToken,
+} = require("../controllers/auth-controller");
 var router = express.Router();
 
-router.get("/", getAllAnnouncements);
-router.post("/", createAnnouncement);
-router.patch("/", editAnnouncement);
-router.delete("/", deleteAnnouncement);
+router.get("/", verifyToken, getAllAnnouncements);
+router.post("/", verifyIsAdmin, createAnnouncement);
+router.patch("/", verifyIsAdmin, editAnnouncement);
+router.delete("/", verifyIsAdmin, deleteAnnouncement);
 
 module.exports = router;

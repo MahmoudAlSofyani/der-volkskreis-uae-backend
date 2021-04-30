@@ -65,7 +65,6 @@ exports.addNewMember = async (req, res, next) => {
     });
 
     // TODO: Send email notification that new member has signed up
-    // TODO: Create JWT Token
 
     if (_newMember) {
       return res.status(200).send({ message: "Account created successfully!" });

@@ -1,5 +1,9 @@
 var express = require("express");
 const {
+  verifyToken,
+  verifyIsAdmin,
+} = require("../controllers/auth-controller");
+const {
   getAllEvents,
   createEvent,
   registerForEvent,
@@ -7,9 +11,9 @@ const {
 } = require("../controllers/events-controller");
 var router = express.Router();
 
-router.get("/", getAllEvents);
-router.get("/:eventId", getAttendeesByEventId);
-router.post("/", createEvent);
-router.post("/register", registerForEvent);
+router.get("/", verifyToken, getAllEvents);
+router.get("/:eventId", verifyIsAdmin, getAttendeesByEventId);
+router.post("/", verifyIsAdmin, createEvent);
+router.post("/register", verifyToken, registerForEvent);
 
 module.exports = router;

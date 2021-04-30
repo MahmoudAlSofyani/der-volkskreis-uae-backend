@@ -10,6 +10,10 @@ const {
 } = require("../controllers/members-controller");
 const { membersValidator } = require("../validators/members-validator");
 const processValidations = require("../utilities/process-validations");
+const {
+  verifyToken,
+  verifyIsAdmin,
+} = require("../controllers/auth-controller");
 var router = express.Router();
 
 // CRUD Operations
@@ -28,13 +32,15 @@ router.post(
 );
 router.post(
   "/search",
+  verifyIsAdmin,
   membersValidator("searchMember"),
   processValidations,
   searchMember
 );
-router.get("/", getAllMembers);
+router.get("/", verifyIsAdmin, getAllMembers);
 router.delete(
   "/",
+  verifyIsAdmin,
   membersValidator("deleteMember"),
   processValidations,
   deleteMember
@@ -46,5 +52,5 @@ router.delete(
 //   updateMember
 // );
 
-router.put("/update-roles", updateMemberRoles);
+router.put("/update-roles", verifyIsAdmin, updateMemberRoles);
 module.exports = router;
