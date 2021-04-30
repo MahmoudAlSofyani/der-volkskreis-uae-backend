@@ -65,15 +65,10 @@ exports.addNewMember = async (req, res, next) => {
     });
 
     // TODO: Send email notification that new member has signed up
+    // TODO: Create JWT Token
 
     if (_newMember) {
       return res.status(200).send({ message: "Account created successfully!" });
-    } else {
-      generateError(
-        "Failed to create account, please try again later",
-        req,
-        next
-      );
     }
   } catch (err) {
     generatDefaultError(err, req, next);
@@ -87,8 +82,6 @@ exports.getAllMembers = async (req, res, next) => {
     });
     if (member) {
       res.status(200).send(member);
-    } else {
-      generateError("Failed to get all members", req, next);
     }
   } catch (err) {
     generatDefaultError(err, req, next);
@@ -174,8 +167,6 @@ exports.searchMember = async (req, res, next) => {
 
     if (member && member.length > 0) {
       res.status(200).send(member);
-    } else {
-      generateError("No results", req, next);
     }
   } catch (err) {
     generatDefaultError(err, req, next);
@@ -195,8 +186,6 @@ exports.deleteMember = async (req, res, next) => {
 
     if (member) {
       res.status(200).send({ msg: "Member deleted successfully" });
-    } else {
-      generateError("Failed to delete member", req, next);
     }
   } catch (err) {
     generatDefaultError(err, req, next);

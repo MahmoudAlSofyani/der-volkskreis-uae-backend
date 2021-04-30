@@ -13,8 +13,6 @@ const membersPublicAttributes = {
   password: false,
 };
 
-// Get all attendees of an event by code
-
 exports.getAllEvents = async (req, res, next) => {
   try {
     const events = await prisma.event.findMany({
@@ -32,8 +30,6 @@ exports.getAllEvents = async (req, res, next) => {
 
     if (events) {
       res.status(200).send(events);
-    } else {
-      generateError("No events found", req, next);
     }
   } catch (err) {
     generatDefaultError(err, req, next);
@@ -47,13 +43,14 @@ exports.getAttendeesByEventId = async (req, res, next) => {
     const _attendees = await prisma.event.findUnique({
       where: { id: eventId },
       select: {
-        members: true,
+        members: {
+          select: membersPublicAttributes,
+        },
       },
     });
 
     if (_attendees && _attendees.members.length > 0)
       res.status(200).send(_attendees);
-    else generateError("No attendees for this event", req, next);
   } catch (err) {
     generatDefaultError(err, req, next);
   }
@@ -75,8 +72,6 @@ exports.createEvent = async (req, res, next) => {
 
     if (newEvent) {
       res.status(200).send(newEvent);
-    } else {
-      generateError("Failed to create event", req, next);
     }
   } catch (err) {
     generatDefaultError(err, req, next);
@@ -99,8 +94,6 @@ exports.registerForEvent = async (req, res, next) => {
 
     if (_member) {
       res.status(200).send({ msg: "Successfully registered for the event" });
-    } else {
-      generateError("Failed to register for event", req, next);
     }
   } catch (err) {
     generatDefaultError(err, req, next);
