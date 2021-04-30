@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "develop": "nodemon ./bin/www",
-    "migrate": "npx prisma migrate dev --name init"
+    "migrate": "prisma migrate reset && prisma migrate dev --name init-migration"
   },
   "dependencies": {
     "@paljs/plugins": "^3.0.1",
@@ -17,6 +17,8 @@
     "express": "~4.16.1",
     "express-validator": "^6.10.0",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33",
     "morgan": "~1.9.1",
     "multer": "^1.4.2",
     "uuid": "^8.3.2"

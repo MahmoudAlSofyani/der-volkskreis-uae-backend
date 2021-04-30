@@ -13,8 +13,6 @@ exports.addNewCarModel = async (req, res, next) => {
 
     if (carModel) {
       res.status(200).send({ msg: "Car model added successfully" });
-    } else {
-      generateError("Failed to add car model", req, next);
     }
   } catch (err) {
     generatDefaultError(err, req, next);

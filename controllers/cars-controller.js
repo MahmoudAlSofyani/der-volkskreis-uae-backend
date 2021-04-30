@@ -17,8 +17,6 @@ exports.updateCar = async (req, res, next) => {
 
     if (_car) {
       res.status(200).send(_car);
-    } else {
-      generateError("Failed to update car", req, next);
     }
   } catch (err) {
     generateError(err, req, next);
@@ -33,8 +31,6 @@ exports.deleteCar = async (req, res, next) => {
 
     if (_car) {
       return res.status(200).send("Car deleted successfully");
-    } else {
-      generateError("Failed to delete car", req, next);
     }
   } catch (err) {
     generatDefaultError(err, req, next);
@@ -56,8 +52,6 @@ exports.addNewCar = async (req, res, next) => {
 
     if (_member) {
       res.status(200).send(_member.cars);
-    } else {
-      generateError("Failed to add new car", req, next);
     }
   } catch (err) {
     generateError(err, req, next);
