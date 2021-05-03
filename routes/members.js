@@ -7,6 +7,7 @@ const {
   updateMember,
   updateMemberRoles,
   deleteCar,
+  getMemberById,
 } = require("../controllers/members-controller");
 const { membersValidator } = require("../validators/members-validator");
 const processValidations = require("../utilities/process-validations");
@@ -23,6 +24,8 @@ var router = express.Router();
 // Get all users *
 // Update user *
 // Delete user *
+
+router.get("/:id", verifyToken, getMemberById);
 
 router.post(
   "/",

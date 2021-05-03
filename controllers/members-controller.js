@@ -32,8 +32,22 @@ exports.addNewMember = async (req, res, next) => {
       whatsAppNumber,
       emailAddress,
       password,
-      cars,
+      carModel,
+      carColor,
+      carYear,
+      plateEmirate,
+      plateCode,
+      plateNumber,
     } = req.body;
+
+    let cars = {
+      carModel,
+      carColor,
+      carYear,
+      plateEmirate,
+      plateCode,
+      plateNumber,
+    };
 
     const _existingMember = await prisma.member.findFirst({
       where: { emailAddress },
@@ -216,6 +230,22 @@ exports.updateMemberRoles = async (req, res, next) => {
     }
   } catch (err) {
     // console.log(err);
+    generatDefaultError(err, req, next);
+  }
+};
+
+exports.getMemberById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const _member = await prisma.member.findUnique({
+      where: { id },
+      select: publicAttributes,
+    });
+    if (_member) {
+      res.status(200).send(_member);
+    }
+  } catch (err) {
     generatDefaultError(err, req, next);
   }
 };

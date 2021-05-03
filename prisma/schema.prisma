@@ -29,6 +29,7 @@ model Member {
   emailAddress   String
   mobileNumber   String
   whatsAppNumber String   @default("null")
+  instagramName  String @default("null")
   password       String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
