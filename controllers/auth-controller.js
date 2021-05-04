@@ -17,6 +17,7 @@ const publicAttributes = {
   cars: true,
   roles: true,
   events: true,
+  browniePoints: true,
 };
 exports.loginMember = async (req, res, next) => {
   try {
@@ -80,7 +81,6 @@ exports.loginMember = async (req, res, next) => {
 exports.verifyToken = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
-
 
     if (authorization) {
       const _token = authorization.split(" ")[1];

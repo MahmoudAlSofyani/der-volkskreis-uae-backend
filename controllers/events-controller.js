@@ -17,6 +17,7 @@ exports.getAllEvents = async (req, res, next) => {
   try {
     const events = await prisma.event.findMany({
       select: {
+        id: true,
         name: true,
         date: true,
         meetingPoint: true,
@@ -94,6 +95,30 @@ exports.registerForEvent = async (req, res, next) => {
 
     if (_member) {
       res.status(200).send({ msg: "Successfully registered for the event" });
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
+exports.checkIfMemberIsRegisteredForEventById = async (req, res, next) => {
+  try {
+    const { eventId, memberId } = req.body;
+
+    const _event = await prisma.event.findUnique({
+      where: { id: eventId },
+      select: {
+        members: true,
+      },
+    });
+
+    if (_event) {
+      let _isRegistered = false;
+      if (_event.members.some((_member) => _member.id === memberId)) {
+        _isRegistered = true;
+      }
+
+      res.status(200).send({ _isRegistered });
     }
   } catch (err) {
     generatDefaultError(err, req, next);
