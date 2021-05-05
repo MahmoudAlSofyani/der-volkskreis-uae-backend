@@ -17,12 +17,20 @@ const publicAttributes = {
   cars: true,
   roles: true,
   events: true,
+  browniePoints: true,
 };
 exports.loginMember = async (req, res, next) => {
   try {
     const { emailAddress, password } = req.body;
 
-    const _member = await prisma.member.findFirst({ where: { emailAddress } });
+    const _member = await prisma.member.findFirst({
+      where: { emailAddress },
+      select: {
+        id: true,
+        password: true,
+        roles: true,
+      },
+    });
 
     if (_member) {
       const _passwordVerified = await bcrypt.compare(
@@ -44,10 +52,25 @@ exports.loginMember = async (req, res, next) => {
         );
 
         if (_token) {
-          res.status(200).send(_token);
+          let _isActive = true;
+          if (
+            !_member.roles.some(
+              (_role) =>
+                _role.name === "INACTIVE" &&
+                !_member.roles.some((_role) => _role.name === "PURGED")
+            )
+          ) {
+            _isActive = true;
+          } else {
+            _isActive = false;
+          }
+
+          let _memberId = _member.id;
+
+          res.status(200).send({ _token, _isActive, _memberId });
         }
       } else {
-        res.status(401).send({ msg: "Invalid email or password" });
+        res.status(401).send({ err: "Invalid email or password" });
       }
     }
   } catch (err) {

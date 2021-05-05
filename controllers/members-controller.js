@@ -20,6 +20,7 @@ const publicAttributes = {
   updatedAt: false,
   cars: true,
   roles: true,
+  browniePoints: true,
   events: true,
 };
 
@@ -32,8 +33,22 @@ exports.addNewMember = async (req, res, next) => {
       whatsAppNumber,
       emailAddress,
       password,
-      cars,
+      carModel,
+      carColor,
+      carYear,
+      plateEmirate,
+      plateCode,
+      plateNumber,
     } = req.body;
+
+    let cars = {
+      carModel,
+      carColor,
+      carYear,
+      plateEmirate,
+      plateCode,
+      plateNumber,
+    };
 
     const _existingMember = await prisma.member.findFirst({
       where: { emailAddress },
@@ -91,7 +106,6 @@ exports.searchMember = async (req, res, next) => {
   try {
     const { searchQuery } = req.body;
 
-    console.log(searchQuery);
 
     const member = await prisma.member.findMany({
       where: {
@@ -215,7 +229,92 @@ exports.updateMemberRoles = async (req, res, next) => {
       return res.status(400).send("Member not found");
     }
   } catch (err) {
-    // console.log(err);
+    generatDefaultError(err, req, next);
+  }
+};
+
+exports.getMemberById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const _member = await prisma.member.findUnique({
+      where: { id },
+      select: publicAttributes,
+    });
+    if (_member) {
+      res.status(200).send(_member);
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
+exports.getMemberStatusById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const _member = await prisma.member.findUnique({
+      where: { id },
+      select: publicAttributes,
+    });
+
+    if (_member) {
+      let _isActive = true;
+      if (
+        !_member.roles.some(
+          (_role) =>
+            _role.name === "INACTIVE" &&
+            !_member.roles.some((_role) => _role.name === "PURGED")
+        )
+      ) {
+        _isActive = true;
+      } else {
+        _isActive = false;
+      }
+      res.status(200).send({ _isActive });
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
+exports.getMemberRoleById = async (req, res, next) => {
+  try {
+    const { id, role } = req.body;
+
+    const _member = await prisma.member.findUnique({
+      where: { id },
+      select: publicAttributes,
+    });
+
+    if (_member) {
+      let _isRoleExist = false;
+      if (_member.roles.some((_role) => _role.name === role.toUpperCase())) {
+        _isRoleExist = true;
+      } else {
+        _isRoleExist = false;
+      }
+
+      res.status(200).send({ _isRoleExist });
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
+exports.getMemberBrowniePointsById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const _member = await prisma.member.findUnique({
+      where: { id },
+      select: publicAttributes,
+    });
+
+    if (_member) {
+      res.status(200).send({ _browniePoints: _member.browniePoints });
+    }
+  } catch (err) {
     generatDefaultError(err, req, next);
   }
 };

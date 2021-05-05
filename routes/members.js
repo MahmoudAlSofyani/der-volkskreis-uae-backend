@@ -7,6 +7,10 @@ const {
   updateMember,
   updateMemberRoles,
   deleteCar,
+  getMemberById,
+  getMemberStatusById,
+  getMemberRoleById,
+  getMemberBrowniePointsById,
 } = require("../controllers/members-controller");
 const { membersValidator } = require("../validators/members-validator");
 const processValidations = require("../utilities/process-validations");
@@ -23,6 +27,8 @@ var router = express.Router();
 // Get all users *
 // Update user *
 // Delete user *
+
+router.get("/:id", verifyToken, getMemberById);
 
 router.post(
   "/",
@@ -53,4 +59,7 @@ router.delete(
 // );
 
 router.put("/update-roles", verifyIsAdmin, updateMemberRoles);
+router.get("/status/:id", verifyToken, getMemberStatusById);
+router.post("/role", verifyToken, getMemberRoleById);
+router.get("/brownie-points/:id", verifyToken, getMemberBrowniePointsById);
 module.exports = router;

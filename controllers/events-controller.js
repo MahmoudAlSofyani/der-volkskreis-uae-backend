@@ -17,6 +17,7 @@ exports.getAllEvents = async (req, res, next) => {
   try {
     const events = await prisma.event.findMany({
       select: {
+        id: true,
         name: true,
         date: true,
         meetingPoint: true,
@@ -30,6 +31,20 @@ exports.getAllEvents = async (req, res, next) => {
 
     if (events) {
       res.status(200).send(events);
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
+exports.getEventById = async (req, res, next) => {
+  try {
+    const { eventId } = req.params;
+
+    const _event = await prisma.event.findUnique({ where: { id: eventId } });
+
+    if (_event) {
+      res.status(200).send(_event);
     }
   } catch (err) {
     generatDefaultError(err, req, next);
@@ -78,6 +93,29 @@ exports.createEvent = async (req, res, next) => {
   }
 };
 
+exports.editEvent = async (req, res, next) => {
+  try {
+    const { id, name, date, meetingPoint, meetingTime, details } = req.body;
+
+    const _event = await prisma.event.update({
+      where: { id },
+      data: {
+        name,
+        date: moment(date).format(),
+        meetingPoint,
+        meetingTime,
+        details,
+      },
+    });
+
+    if (_event) {
+      res.status(200).send(_event);
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
 exports.registerForEvent = async (req, res, next) => {
   try {
     const { memberId, eventId } = req.body;
@@ -94,6 +132,30 @@ exports.registerForEvent = async (req, res, next) => {
 
     if (_member) {
       res.status(200).send({ msg: "Successfully registered for the event" });
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
+exports.checkIfMemberIsRegisteredForEventById = async (req, res, next) => {
+  try {
+    const { eventId, memberId } = req.body;
+
+    const _event = await prisma.event.findUnique({
+      where: { id: eventId },
+      select: {
+        members: true,
+      },
+    });
+
+    if (_event) {
+      let _isRegistered = false;
+      if (_event.members.some((_member) => _member.id === memberId)) {
+        _isRegistered = true;
+      }
+
+      res.status(200).send({ _isRegistered });
     }
   } catch (err) {
     generatDefaultError(err, req, next);

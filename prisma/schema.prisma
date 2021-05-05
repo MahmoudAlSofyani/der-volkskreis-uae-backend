@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root:root@localhost:3306/test_dvu_db"
+  url      = env("DATABASE_URL")
 }
 
 enum RoleNames {
@@ -29,7 +29,9 @@ model Member {
   emailAddress   String
   mobileNumber   String
   whatsAppNumber String   @default("null")
+  instagramName  String   @default("null")
   password       String
+  browniePoints  Int      @default(0)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   /// @onDelete(CASCADE)
@@ -72,7 +74,7 @@ model Car {
   plateEmirate String
   plateCode    String
   plateNumber  String
-  vinNumber    String @default("null")
+  vinNumber    String @default("null") // this is mandatory!
   member       Member @relation(fields: [memberId], references: [id])
   memberId     String
 }

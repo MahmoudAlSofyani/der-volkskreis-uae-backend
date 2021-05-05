@@ -116,7 +116,6 @@ async function main() {
           break;
         }
         default:
-          console.log("here");
           return;
       }
     });

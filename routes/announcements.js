@@ -4,6 +4,7 @@ const {
   createAnnouncement,
   editAnnouncement,
   deleteAnnouncement,
+  getAnnouncementById,
 } = require("../controllers/announcements-controller");
 const {
   verifyIsAdmin,
@@ -12,6 +13,7 @@ const {
 var router = express.Router();
 
 router.get("/", verifyToken, getAllAnnouncements);
+router.get("/:eventId", verifyToken, getAnnouncementById);
 router.post("/", verifyIsAdmin, createAnnouncement);
 router.patch("/", verifyIsAdmin, editAnnouncement);
 router.delete("/", verifyIsAdmin, deleteAnnouncement);
