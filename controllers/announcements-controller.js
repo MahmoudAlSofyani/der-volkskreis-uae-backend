@@ -14,6 +14,21 @@ exports.getAllAnnouncements = async (req, res, next) => {
   }
 };
 
+exports.getAnnouncementById = async (req, res, next) => {
+  try {
+    const { eventId } = req.params;
+    const _announcement = await prisma.announcement.findUnique({
+      where: { id: eventId },
+    });
+
+    if (_announcement) {
+      res.status(200).send(_announcement);
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
 exports.createAnnouncement = async (req, res, next) => {
   try {
     const { title, details } = req.body;

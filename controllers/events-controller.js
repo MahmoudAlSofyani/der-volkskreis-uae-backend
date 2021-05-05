@@ -37,6 +37,20 @@ exports.getAllEvents = async (req, res, next) => {
   }
 };
 
+exports.getEventById = async (req, res, next) => {
+  try {
+    const { eventId } = req.params;
+
+    const _event = await prisma.event.findUnique({ where: { id: eventId } });
+
+    if (_event) {
+      res.status(200).send(_event);
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
 exports.getAttendeesByEventId = async (req, res, next) => {
   try {
     const { eventId } = req.params;
@@ -73,6 +87,29 @@ exports.createEvent = async (req, res, next) => {
 
     if (newEvent) {
       res.status(200).send(newEvent);
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
+exports.editEvent = async (req, res, next) => {
+  try {
+    const { id, name, date, meetingPoint, meetingTime, details } = req.body;
+
+    const _event = await prisma.event.update({
+      where: { id },
+      data: {
+        name,
+        date: moment(date).format(),
+        meetingPoint,
+        meetingTime,
+        details,
+      },
+    });
+
+    if (_event) {
+      res.status(200).send(_event);
     }
   } catch (err) {
     generatDefaultError(err, req, next);

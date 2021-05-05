@@ -69,3 +69,58 @@ exports.getPlateCodes = async (req, res, next) => {
     generatDefaultError(err, req, next);
   }
 };
+
+exports.getActiveMemberCount = async (req, res, next) => {
+  try {
+    const _members = await prisma.member.count({
+      where: {
+        roles: {
+          some: {
+            OR: [
+              {
+                name: "ACTIVE",
+              },
+              {
+                name: "ADMIN",
+              },
+              {
+                name: "WOLFSBURG",
+              },
+              {
+                name: "MEMBER",
+              },
+            ],
+          },
+        },
+      },
+    });
+
+    if (_members) {
+      res.status(200).send({ count: _members });
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
+exports.getInactiveMemberCount = async (req, res, next) => {
+  try {
+    const _members = await prisma.member.count({
+      where: {
+        roles: {
+          some: {
+            name: "INACTIVE",
+            AND: {
+              NOT: {
+                name: "PURGED",
+              },
+            },
+          },
+        },
+      },
+    });
+    if (_members) {
+      res.status(200).send({ count: _members });
+    }
+  } catch (err) {}
+};
