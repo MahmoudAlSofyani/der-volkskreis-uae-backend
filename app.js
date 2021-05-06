@@ -23,6 +23,11 @@ app.use(function (req, res, next) {
     "Content-Type",
     req.accepts().includes("text/html") ? "text/html" : "application/json"
   );
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
   res.set("Accept-Encoding", "gzip");
   if (req.method === "OPTIONS") {
     res.sendStatus(200);
