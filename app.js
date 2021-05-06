@@ -18,18 +18,23 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
-app.use(function (req, res, next) {
-  res.set(
-    "Content-Type",
-    req.accepts().includes("text/html") ? "text/html" : "application/json"
-  );
-  res.set("Accept-Encoding", "gzip");
-  if (req.method === "OPTIONS") {
-    res.sendStatus(200);
-  } else {
-    next();
-  }
-});
+// app.use(function (req, res, next) {
+//   res.set(
+//     "Content-Type",
+//     req.accepts().includes("text/html") ? "text/html" : "application/json"
+//   );
+//   res.setHeader("Access-Control-Allow-Origin", "*");
+//   res.setHeader(
+//     "Access-Control-Allow-Methods",
+//     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+//   );
+//   res.set("Accept-Encoding", "gzip");
+//   if (req.method === "OPTIONS") {
+//     res.sendStatus(200);
+//   } else {
+//     next();
+//   }
+// });
 
 app.use("/", indexRouter);
 app.use("/members", membersRouter);

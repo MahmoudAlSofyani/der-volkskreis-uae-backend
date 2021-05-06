@@ -72,7 +72,7 @@ exports.addNewMember = async (req, res, next) => {
           create: cars,
         },
         roles: {
-          create: {
+          connect: {
             name: "INACTIVE",
           },
         },
@@ -105,7 +105,6 @@ exports.getAllMembers = async (req, res, next) => {
 exports.searchMember = async (req, res, next) => {
   try {
     const { searchQuery } = req.body;
-
 
     const member = await prisma.member.findMany({
       where: {
@@ -207,29 +206,52 @@ exports.deleteMember = async (req, res, next) => {
 
 exports.updateMemberRoles = async (req, res, next) => {
   try {
-    const { roles, id } = req.body;
+    const { roleType, id } = req.body;
 
-    const member = await prisma.member.findFirst({ where: { id } });
+    const _roleType = roleType.toLowerCase();
 
-    if (member) {
-      const _updatedMember = await prisma.member.update({
-        where: { id },
-        data: {
-          roles: {
-            create: roles.create,
-            delete: roles.delete,
-          },
-        },
-      });
+    let _queryArgs = [];
 
-      if (_updatedMember) {
-        return res.status(200).send("Member updated");
+    switch (_roleType) {
+      case "admin": {
+        _queryArgs["connect"] = [{ name: "ADMIN" }];
+        break;
       }
-    } else {
-      return res.status(400).send("Member not found");
+      case "verify": {
+        _queryArgs["connect"] = [{ name: "ACTIVE" }];
+        _queryArgs["delete"] = [{ name: "INACTIVE" }];
+        break;
+      }
+      case "purged": {
+        _queryArgs["connect"] = [{ name: "PURGED" }];
+        _queryArgs["delete"] = [{ name: "ACTIVE" }];
+        break;
+      }
+      case "reject": {
+        _queryArgs["connect"] = [{ name: "REJECTED" }];
+        _queryArgs["delete"] = [{ name: "INACTIVE" }];
+        break;
+      }
+      default: {
+        _queryArgs = [];
+      }
+    }
+
+    const _member = await prisma.member.update({
+      where: { id },
+      data: {
+        roles: {
+          connect: _queryArgs.connect,
+          disconnect: _queryArgs.delete,
+        },
+      },
+    });
+
+    if (_member) {
+      res.status(200).send({ msg: "Member roles updated!" });
     }
   } catch (err) {
-    generatDefaultError(err, req, next);
+    console.log(err);
   }
 };
 

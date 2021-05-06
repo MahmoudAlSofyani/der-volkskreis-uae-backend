@@ -15,6 +15,33 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function main() {
+  const roles = [
+    {
+      name: "ADMIN",
+    },
+    {
+      name: "ACTIVE",
+    },
+    {
+      name: "INACTIVE",
+    },
+    {
+      name: "WOLFSBURG",
+    },
+    {
+      name: "PURGED"
+    },
+    {
+      name: "REJECTED"
+    }
+  ];
+
+  for (let role of roles) {
+    await prisma.role.create({
+      data: role,
+    });
+  }
+
   for (let carModel of carModels) {
     await prisma.carModel.create({
       data: carModel,
