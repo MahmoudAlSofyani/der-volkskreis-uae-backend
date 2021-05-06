@@ -18,6 +18,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET,POST,PUT,PATCH,HEAD,DELETE,OPTIONS"
+  );
+  res.header("Access-Control-Allow-Headers", "content-Type,x-requested-with");
+});
 
 app.use("/", indexRouter);
 app.use("/members", membersRouter);
