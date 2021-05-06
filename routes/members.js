@@ -11,6 +11,7 @@ const {
   getMemberStatusById,
   getMemberRoleById,
   getMemberBrowniePointsById,
+  verifyMember,
 } = require("../controllers/members-controller");
 const { membersValidator } = require("../validators/members-validator");
 const processValidations = require("../utilities/process-validations");
@@ -20,13 +21,6 @@ const {
 } = require("../controllers/auth-controller");
 var router = express.Router();
 
-// CRUD Operations
-
-// Add new user *
-// Get specific user *
-// Get all users *
-// Update user *
-// Delete user *
 
 router.get("/:id", verifyToken, getMemberById);
 
@@ -43,7 +37,9 @@ router.post(
   processValidations,
   searchMember
 );
-router.get("/", verifyIsAdmin, getAllMembers);
+// Add verifyIsAdmin Middleware here after testing
+router.get("/", getAllMembers);
+
 router.delete(
   "/",
   verifyIsAdmin,

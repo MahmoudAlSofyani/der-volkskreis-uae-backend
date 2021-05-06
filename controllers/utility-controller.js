@@ -2,6 +2,22 @@ const { PrismaClient } = require("@prisma/client");
 const { generateError, generatDefaultError } = require("../helpers/common");
 const prisma = new PrismaClient();
 
+const publicAttributes = {
+  id: true,
+  firstName: true,
+  lastName: true,
+  emailAddress: true,
+  mobileNumber: true,
+  whatsAppNumber: true,
+  password: false,
+  createdAt: true,
+  updatedAt: false,
+  cars: true,
+  roles: false,
+  browniePoints: false,
+  events: false,
+};
+
 exports.addNewCarModel = async (req, res, next) => {
   try {
     const { name } = req.body;
@@ -105,22 +121,39 @@ exports.getActiveMemberCount = async (req, res, next) => {
 
 exports.getInactiveMemberCount = async (req, res, next) => {
   try {
+
     const _members = await prisma.member.count({
       where: {
         roles: {
           some: {
             name: "INACTIVE",
-            AND: {
-              NOT: {
-                name: "PURGED",
-              },
-            },
           },
         },
       },
     });
-    if (_members) {
-      res.status(200).send({ count: _members });
-    }
+
+    if (_members > 0) res.status(200).send({ count: _members });
+    else res.status(200).send({ count: 0 });
   } catch (err) {}
+};
+
+exports.getUnverifiedMembers = async (req, res, next) => {
+  try {
+    const _members = await prisma.member.findMany({
+      select: publicAttributes,
+      where: {
+        roles: {
+          some: {
+            name: "INACTIVE",
+          },
+        },
+      },
+    });
+
+    if (_members) {
+      res.status(200).send(_members);
+    }
+  } catch (err) {
+    console.log(err);
+  }
 };

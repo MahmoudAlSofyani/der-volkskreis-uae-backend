@@ -17,9 +17,8 @@ enum RoleNames {
 }
 
 model Role {
-  name     RoleNames @default(INACTIVE)
-  member   Member    @relation(fields: [memberId], references: [id])
-  memberId String    @id
+  name    String   @id
+  members Member[]
 }
 
 model Member {
@@ -36,7 +35,6 @@ model Member {
   updatedAt      DateTime @updatedAt
   /// @onDelete(CASCADE)
   cars           Car[]
-  /// @onDelete(CASCADE)
   roles          Role[]
   /// @onDelete(CASCADE)
   events         Event[]
