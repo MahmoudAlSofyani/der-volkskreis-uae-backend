@@ -10,6 +10,8 @@ var utilitiesRouter = require("./routes/utility");
 var eventsRouter = require("./routes/events");
 var announcementsRouter = require("./routes/announcements");
 var authRouter = require("./routes/auth");
+var postsRouter = require("./routes/posts");
+var commentsRouter = require("./routes/comments");
 var app = express();
 
 app.use(logger("dev"));
@@ -43,5 +45,7 @@ app.use("/utility", utilitiesRouter);
 app.use("/events", eventsRouter);
 app.use("/announcements", announcementsRouter);
 app.use("/auth", authRouter);
+app.use("/posts", postsRouter);
+app.use("/comments", commentsRouter);
 
 module.exports = app;

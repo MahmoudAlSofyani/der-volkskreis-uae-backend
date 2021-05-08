@@ -38,6 +38,8 @@ model Member {
   roles          Role[]
   /// @onDelete(CASCADE)
   events         Event[]
+  comments       Comment?
+  posts          Post[]
 }
 
 model CarModel {
@@ -95,4 +97,33 @@ model Announcement {
   details   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id        String    @id @default(uuid())
+  title     String
+  comments  Comment[]
+  category  Category?
+  member    Member    @relation(fields: [memberId], references: [id])
+  memberId  String
+  createdAt DateTime  @default(now())
+
+}
+
+model Category {
+  id     String @id @default(uuid())
+  name   String
+  post   Post   @relation(fields: [postId], references: [id])
+  postId String
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  comment   String
+  member    Member   @relation(fields: [memberId], references: [id])
+  memberId  String
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  createdAt DateTime @default(now())
+
 }
