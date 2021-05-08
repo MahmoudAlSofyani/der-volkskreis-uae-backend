@@ -25,11 +25,7 @@ exports.loginMember = async (req, res, next) => {
 
     const _member = await prisma.member.findFirst({
       where: { emailAddress },
-      select: {
-        id: true,
-        password: true,
-        roles: true,
-      },
+      select: { ...publicAttributes, password: true },
     });
 
     if (_member) {
@@ -52,22 +48,7 @@ exports.loginMember = async (req, res, next) => {
         );
 
         if (_token) {
-          let _isActive = true;
-          if (
-            !_member.roles.some(
-              (_role) =>
-                _role.name === "INACTIVE" &&
-                !_member.roles.some((_role) => _role.name === "PURGED")
-            )
-          ) {
-            _isActive = true;
-          } else {
-            _isActive = false;
-          }
-
-          let _memberId = _member.id;
-
-          res.status(200).send({ _token, _isActive, _memberId });
+          res.status(200).send({ _token, _member });
         }
       } else {
         res.status(401).send({ err: "Invalid email or password" });

@@ -227,6 +227,11 @@ exports.updateMemberRoles = async (req, res, next) => {
         _queryArgs["delete"] = [{ name: "ACTIVE" }];
         break;
       }
+      case "unpurge": {
+        _queryArgs["connect"] = [{ name: "ACTIVE" }];
+        _queryArgs["delete"] = [{ name: "PURGED" }];
+        break;
+      }
       case "reject": {
         _queryArgs["connect"] = [{ name: "REJECTED" }];
         _queryArgs["delete"] = [{ name: "INACTIVE" }];
