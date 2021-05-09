@@ -25,11 +25,7 @@ exports.loginMember = async (req, res, next) => {
 
     const _member = await prisma.member.findFirst({
       where: { emailAddress },
-      select: {
-        id: true,
-        password: true,
-        roles: true,
-      },
+      select: { ...publicAttributes, password: true },
     });
 
     if (_member) {
@@ -52,22 +48,7 @@ exports.loginMember = async (req, res, next) => {
         );
 
         if (_token) {
-          let _isActive = true;
-          if (
-            !_member.roles.some(
-              (_role) =>
-                _role.name === "INACTIVE" &&
-                !_member.roles.some((_role) => _role.name === "PURGED")
-            )
-          ) {
-            _isActive = true;
-          } else {
-            _isActive = false;
-          }
-
-          let _memberId = _member.id;
-
-          res.status(200).send({ _token, _isActive, _memberId });
+          res.status(200).send({ _token, _member });
         }
       } else {
         res.status(401).send({ err: "Invalid email or password" });
@@ -147,6 +128,44 @@ exports.verifyIsAdmin = async (req, res, next) => {
       }
     } else {
       res.status(401).send({ msg: "Please log in first" });
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
+exports.verifyValidToken = async (req, res, next) => {
+  try {
+    const { authorization } = req.headers;
+
+    if (authorization) {
+      const _token = authorization.split(" ")[1];
+
+      const _decodedPayload = await jwt.verify(_token, process.env.JWT_SECRET);
+
+      if (_decodedPayload) {
+        const { id } = _decodedPayload.data;
+        const _member = await prisma.member.findUnique({
+          where: { id },
+          select: publicAttributes,
+        });
+
+        if (_member) {
+          if (
+            !_member.roles.some(
+              (_role) =>
+                _role.name === "INACTIVE" &&
+                !_member.roles.some((_role) => _role.name === "PURGED")
+            )
+          ) {
+            res.status(200).send({ _member });
+          } else {
+            res.status(401);
+          }
+        }
+      }
+    } else {
+      res.status(401);
     }
   } catch (err) {
     generatDefaultError(err, req, next);

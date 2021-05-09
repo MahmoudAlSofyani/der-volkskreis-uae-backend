@@ -22,22 +22,24 @@ model Role {
 }
 
 model Member {
-  id             String   @id @default(uuid())
+  id             String    @id @default(uuid())
   firstName      String
   lastName       String
   emailAddress   String
   mobileNumber   String
-  whatsAppNumber String   @default("null")
-  instagramName  String   @default("null")
+  whatsAppNumber String    @default("null")
+  instagramName  String    @default("null")
   password       String
-  browniePoints  Int      @default(0)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  browniePoints  Int       @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
   /// @onDelete(CASCADE)
   cars           Car[]
   roles          Role[]
   /// @onDelete(CASCADE)
   events         Event[]
+  comments       Comment[]
+  posts          Post[]
 }
 
 model CarModel {
@@ -95,4 +97,26 @@ model Announcement {
   details   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id          String    @id @default(uuid())
+  title       String
+  comments    Comment[]
+  description String    @default("")
+  member      Member    @relation(fields: [memberId], references: [id])
+  memberId    String
+  createdAt   DateTime  @default(now())
+
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  comment   String
+  member    Member   @relation(fields: [memberId], references: [id])
+  memberId  String
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  createdAt DateTime @default(now())
+
 }
