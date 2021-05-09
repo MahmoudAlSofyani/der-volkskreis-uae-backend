@@ -133,3 +133,41 @@ exports.verifyIsAdmin = async (req, res, next) => {
     generatDefaultError(err, req, next);
   }
 };
+
+exports.verifyValidToken = async (req, res, next) => {
+  try {
+    const { authorization } = req.headers;
+
+    if (authorization) {
+      const _token = authorization.split(" ")[1];
+
+      const _decodedPayload = await jwt.verify(_token, process.env.JWT_SECRET);
+
+      if (_decodedPayload) {
+        const { id } = _decodedPayload.data;
+        const _member = await prisma.member.findUnique({
+          where: { id },
+          select: publicAttributes,
+        });
+
+        if (_member) {
+          if (
+            !_member.roles.some(
+              (_role) =>
+                _role.name === "INACTIVE" &&
+                !_member.roles.some((_role) => _role.name === "PURGED")
+            )
+          ) {
+            res.status(200).send({ _member });
+          } else {
+            res.status(401);
+          }
+        }
+      }
+    } else {
+      res.status(401);
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};

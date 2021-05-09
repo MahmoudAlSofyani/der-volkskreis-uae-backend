@@ -22,23 +22,23 @@ model Role {
 }
 
 model Member {
-  id             String   @id @default(uuid())
+  id             String    @id @default(uuid())
   firstName      String
   lastName       String
   emailAddress   String
   mobileNumber   String
-  whatsAppNumber String   @default("null")
-  instagramName  String   @default("null")
+  whatsAppNumber String    @default("null")
+  instagramName  String    @default("null")
   password       String
-  browniePoints  Int      @default(0)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  browniePoints  Int       @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
   /// @onDelete(CASCADE)
   cars           Car[]
   roles          Role[]
   /// @onDelete(CASCADE)
   events         Event[]
-  comments       Comment?
+  comments       Comment[]
   posts          Post[]
 }
 
@@ -100,21 +100,14 @@ model Announcement {
 }
 
 model Post {
-  id        String    @id @default(uuid())
-  title     String
-  comments  Comment[]
-  category  Category?
-  member    Member    @relation(fields: [memberId], references: [id])
-  memberId  String
-  createdAt DateTime  @default(now())
+  id          String    @id @default(uuid())
+  title       String
+  comments    Comment[]
+  description String    @default("")
+  member      Member    @relation(fields: [memberId], references: [id])
+  memberId    String
+  createdAt   DateTime  @default(now())
 
-}
-
-model Category {
-  id     String @id @default(uuid())
-  name   String
-  post   Post   @relation(fields: [postId], references: [id])
-  postId String
 }
 
 model Comment {

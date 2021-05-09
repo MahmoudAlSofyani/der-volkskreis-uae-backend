@@ -10,16 +10,12 @@ const prisma = new PrismaClient();
 
 exports.createPost = async (req, res, next) => {
   try {
-    const { categoryName, memberId, title } = req.body;
+    const { memberId, title, description } = req.body;
 
     const _post = await prisma.post.create({
       data: {
-        category: {
-          create: {
-            name: categoryName,
-          },
-        },
         title,
+        description,
         member: {
           connect: {
             id: memberId,
@@ -27,7 +23,6 @@ exports.createPost = async (req, res, next) => {
         },
       },
       select: {
-        category: true,
         comments: true,
         title: true,
         id: true,
@@ -44,18 +39,58 @@ exports.createPost = async (req, res, next) => {
 
 exports.getAllPost = async (req, res, next) => {
   try {
-    const _posts = await prisma.post.findMany({
+    const _post = await prisma.post.findMany({
+      orderBy: {
+        createdAt: 'desc'
+      },
       select: {
         title: true,
+        id: true,
         member: {
           select: {
             firstName: true,
             lastName: true,
           },
         },
-        category: {
+        comments: {
           select: {
-            name: true,
+            createdAt: true,
+            comment: true,
+            member: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
+
+        createdAt: true,
+      },
+    });
+
+    if (_post) {
+      res.status(200).send(_post);
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
+exports.getPostById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const _post = await prisma.post.findUnique({
+      where: { id },
+      select: {
+        title: true,
+        id: true,
+        description: true,
+        member: {
+          select: {
+            firstName: true,
+            lastName: true,
           },
         },
         comments: {
@@ -74,8 +109,8 @@ exports.getAllPost = async (req, res, next) => {
       },
     });
 
-    if (_posts) {
-      res.status(200).send(_posts);
+    if (_post) {
+      res.status(200).send(_post);
     }
   } catch (err) {
     generatDefaultError(err, req, next);

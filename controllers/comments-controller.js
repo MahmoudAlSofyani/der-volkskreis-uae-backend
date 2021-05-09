@@ -12,6 +12,8 @@ exports.addNewComment = async (req, res, next) => {
   try {
     const { memberId, postId, comment } = req.body;
 
+
+
     const _comment = await prisma.comment.create({
       data: {
         comment,
