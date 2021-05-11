@@ -118,19 +118,35 @@ exports.editEvent = async (req, res, next) => {
 
 exports.registerForEvent = async (req, res, next) => {
   try {
-    const { memberId, eventId } = req.body;
-    const _member = await prisma.member.update({
-      where: { id: memberId },
+    const { memberId, eventId } = req.body;s
+
+    const _event = await prisma.event.update({
+      where: { id: eventId },
       data: {
-        events: {
+        members: {
           connect: {
-            id: eventId,
+            id: memberId,
           },
         },
       },
     });
 
-    if (_member) {
+    if (_event) {
+      const _eventStatus = await prisma.eventStatus.create({
+        data: {
+          status: false,
+          event: {
+            connect: {
+              id: eventId,
+            },
+          },
+          member: {
+            connect: {
+              id: memberId,
+            },
+          },
+        },
+      });
       res.status(200).send({ msg: "Successfully registered for the event" });
     }
   } catch (err) {
@@ -159,5 +175,47 @@ exports.checkIfMemberIsRegisteredForEventById = async (req, res, next) => {
     }
   } catch (err) {
     generatDefaultError(err, req, next);
+  }
+};
+
+exports.updateEventStatus = async (req, res, next) => {
+  try {
+    const { memberId, eventId, isAttended } = req.body;
+
+    const _eventStatus = await prisma.eventStatus.findFirst({
+      where: {
+        AND: [
+          {
+            member: {
+              id: memberId,
+            },
+          },
+          {
+            event: {
+              id: eventId,
+            },
+          },
+        ],
+      },
+    });
+
+    if (_eventStatus) {
+      const { id } = _eventStatus;
+
+      const _updateStatus = await prisma.eventStatus.update({
+        where: {
+          id,
+        },
+        data: {
+          status: isAttended,
+        },
+      });
+
+      if (_updateStatus) {
+        res.status(200).send(_updateStatus);
+      }
+    }
+  } catch (err) {
+    console.log(err);
   }
 };
