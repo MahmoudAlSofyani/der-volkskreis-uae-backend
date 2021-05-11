@@ -11,6 +11,7 @@ const {
   checkIfMemberIsRegisteredForEventById,
   getEventById,
   editEvent,
+  updateEventStatus,
 } = require("../controllers/events-controller");
 var router = express.Router();
 
@@ -21,5 +22,6 @@ router.post("/", verifyIsAdmin, createEvent);
 router.post("/register", verifyToken, registerForEvent);
 router.post("/check", verifyToken, checkIfMemberIsRegisteredForEventById);
 router.patch("/", verifyIsAdmin, editEvent);
+router.put("/status", updateEventStatus);
 
 module.exports = router;

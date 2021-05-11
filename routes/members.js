@@ -21,7 +21,6 @@ const {
 } = require("../controllers/auth-controller");
 var router = express.Router();
 
-
 router.get("/:id", verifyToken, getMemberById);
 
 router.post(
@@ -47,12 +46,8 @@ router.delete(
   processValidations,
   deleteMember
 );
-// router.patch(
-//   "/",
-//   membersValidator("updateMember"),
-//   processValidations,
-//   updateMember
-// );
+
+router.patch("/", updateMember);
 
 router.put("/update-roles", verifyIsAdmin, updateMemberRoles);
 router.get("/status/:id", verifyToken, getMemberStatusById);

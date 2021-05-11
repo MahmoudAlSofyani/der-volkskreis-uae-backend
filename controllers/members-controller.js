@@ -39,6 +39,7 @@ exports.addNewMember = async (req, res, next) => {
       plateEmirate,
       plateCode,
       plateNumber,
+      vinNumber,
     } = req.body;
 
     let cars = {
@@ -48,6 +49,7 @@ exports.addNewMember = async (req, res, next) => {
       plateEmirate,
       plateCode,
       plateNumber,
+      vinNumber,
     };
 
     const _existingMember = await prisma.member.findFirst({
@@ -340,6 +342,29 @@ exports.getMemberBrowniePointsById = async (req, res, next) => {
 
     if (_member) {
       res.status(200).send({ _browniePoints: _member.browniePoints });
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
+exports.updateMember = async (req, res, next) => {
+  try {
+    const { id, mobileNumber, whatsAppNumber, emailAddress, instagramName } =
+      req.body;
+
+    const _member = await prisma.member.update({
+      where: { id },
+      data: {
+        mobileNumber,
+        whatsAppNumber,
+        emailAddress,
+        instagramName,
+      },
+    });
+
+    if (_member) {
+      res.status(200).send(_member);
     }
   } catch (err) {
     generatDefaultError(err, req, next);
