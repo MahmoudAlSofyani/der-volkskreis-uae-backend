@@ -118,7 +118,7 @@ exports.editEvent = async (req, res, next) => {
 
 exports.registerForEvent = async (req, res, next) => {
   try {
-    const { memberId, eventId } = req.body;s
+    const { memberId, eventId } = req.body;
 
     const _event = await prisma.event.update({
       where: { id: eventId },
