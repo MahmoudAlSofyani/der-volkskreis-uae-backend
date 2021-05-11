@@ -43,6 +43,9 @@ exports.addNewCar = async (req, res, next) => {
 
     const _member = await prisma.member.update({
       where: { id },
+      select: {
+        cars: true,
+      },
       data: {
         cars: {
           create: cars,

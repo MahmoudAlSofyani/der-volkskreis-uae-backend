@@ -74,7 +74,7 @@ model Car {
   plateEmirate String
   plateCode    String
   plateNumber  String
-  vinNumber    String @default("null") // this is mandatory!
+  vinNumber    String
   member       Member @relation(fields: [memberId], references: [id])
   memberId     String
 }
