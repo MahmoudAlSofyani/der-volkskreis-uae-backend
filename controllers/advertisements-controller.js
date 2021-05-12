@@ -37,17 +37,29 @@ exports.updateAdvertisementVerificationStatus = async (req, res, next) => {
   try {
     const { id, verified } = req.body;
 
-    const _advertisment = await prisma.advertisement.update({
-      where: {
-        id,
-      },
-      data: {
-        verified,
-      },
-    });
+    if (verified) {
+      const _advertisement = await prisma.advertisement.update({
+        where: {
+          id,
+        },
+        data: {
+          verified,
+        },
+      });
 
-    if (_advertisment) {
-      res.status(200).send(_advertisment);
+      if (_advertisement) {
+        res.status(200).send(_advertisement);
+      }
+    } else {
+      const _advertisement = await prisma.advertisement.delete({
+        where: {
+          id,
+        },
+      });
+
+      if (_advertisement) {
+        res.status(200).send("Deleted");
+      }
     }
   } catch (err) {
     console.log(err);
@@ -75,7 +87,7 @@ exports.updateAdvertisementStatus = async (req, res, next) => {
 
 exports.deleteAdvertisement = async (req, res, next) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
 
     const _advertisment = await prisma.advertisement.delete({
       where: { id },
@@ -114,7 +126,8 @@ exports.getAllAdvertisements = async (req, res, next) => {
         description: true,
         sold: true,
         image: true,
-        id: true
+        id: true,
+        verified: true,
       },
     });
 

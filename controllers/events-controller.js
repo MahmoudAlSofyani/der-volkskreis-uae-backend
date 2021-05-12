@@ -3,6 +3,8 @@ const { generateError, generatDefaultError } = require("../helpers/common");
 const prisma = new PrismaClient();
 const moment = require("moment");
 
+// dont create a new event status if member and event id combination already exists
+
 const membersPublicAttributes = {
   id: true,
   firstName: true,
