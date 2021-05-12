@@ -22,17 +22,17 @@ model Role {
 }
 
 model Member {
-  id             String        @id @default(uuid())
+  id             String          @id @default(uuid())
   firstName      String
   lastName       String
   emailAddress   String
   mobileNumber   String
-  whatsAppNumber String        @default("null")
-  instagramName  String        @default("null")
+  whatsAppNumber String          @default("null")
+  instagramName  String          @default("null")
   password       String
-  browniePoints  Int           @default(0)
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  browniePoints  Int             @default(0)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
   /// @onDelete(CASCADE)
   cars           Car[]
   roles          Role[]
@@ -41,6 +41,7 @@ model Member {
   comments       Comment[]
   posts          Post[]
   eventStatuses  EventStatus[]
+  adverts        Advertisement[]
 }
 
 model CarModel {
@@ -130,4 +131,24 @@ model Comment {
   postId    String
   createdAt DateTime @default(now())
 
+}
+
+model File {
+  id              String         @id @default(uuid())
+  filename        String
+  advert          Advertisement? @relation(fields: [advertisementId], references: [id])
+  advertisementId String?
+  type            String
+}
+
+model Advertisement {
+  id          String  @id @default(uuid())
+  price       Decimal
+  title       String
+  description String
+  verified    Boolean @default(false)
+  sold        Boolean @default(false)
+  image       File?
+  member      Member  @relation(fields: [memberId], references: [id])
+  memberId    String
 }

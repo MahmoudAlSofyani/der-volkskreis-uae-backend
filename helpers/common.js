@@ -12,3 +12,16 @@ exports.generatDefaultError = (err, req, next) => {
   error.status = 500;
   next(error);
 };
+
+exports.imagesFileFilter = (req, file, cb) => {
+  try {
+    if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
+      req.fileValidationError = "Only images are allowed";
+      return cb(new Error("Only images are allowed"), false);
+    }
+
+    cb(null, true);
+  } catch (err) {
+    console.log(err);
+  }
+};

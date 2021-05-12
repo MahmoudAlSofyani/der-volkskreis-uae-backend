@@ -1,5 +1,6 @@
 var express = require("express");
 const { verifyIsAdmin } = require("../controllers/auth-controller");
+const { downloadFile } = require("../controllers/file-controller");
 const {
   addNewCarModel,
   getCarModels,
@@ -20,5 +21,6 @@ router.get("/plate-codes", getPlateCodes);
 router.get("/member-count", getActiveMemberCount);
 router.get("/member-count/inactive", getInactiveMemberCount);
 router.get("/members-unverified", getUnverifiedMembers);
+router.get("/file/:id", downloadFile);
 
 module.exports = router;
