@@ -53,6 +53,8 @@ exports.loginMember = async (req, res, next) => {
       } else {
         res.status(401).send({ err: "Invalid email or password" });
       }
+    } else {
+      res.status(401).send({ err: "Invalid email or password" });
     }
   } catch (err) {
     generatDefaultError(err, req, next);
