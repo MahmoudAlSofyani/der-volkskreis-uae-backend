@@ -12,7 +12,10 @@ var announcementsRouter = require("./routes/announcements");
 var authRouter = require("./routes/auth");
 var postsRouter = require("./routes/posts");
 var commentsRouter = require("./routes/comments");
+var advertisementsRouter = require("./routes/advertisements");
 var app = express();
+
+global.__basedir = __dirname;
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -37,7 +40,7 @@ app.use(cors());
 //     next();
 //   }
 // });
-
+// app.use(express.static('uploads'));
 app.use("/", indexRouter);
 app.use("/members", membersRouter);
 app.use("/cars", carsRouter);
@@ -47,5 +50,6 @@ app.use("/announcements", announcementsRouter);
 app.use("/auth", authRouter);
 app.use("/posts", postsRouter);
 app.use("/comments", commentsRouter);
+app.use("/advertisements", advertisementsRouter);
 
 module.exports = app;
