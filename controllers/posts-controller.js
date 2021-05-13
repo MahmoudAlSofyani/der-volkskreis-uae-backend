@@ -41,7 +41,7 @@ exports.getAllPost = async (req, res, next) => {
   try {
     const _post = await prisma.post.findMany({
       orderBy: {
-        createdAt: 'desc'
+        createdAt: "desc",
       },
       select: {
         title: true,
@@ -60,6 +60,7 @@ exports.getAllPost = async (req, res, next) => {
               select: {
                 firstName: true,
                 lastName: true,
+                profilePicture: true,
               },
             },
           },
@@ -87,6 +88,59 @@ exports.getPostById = async (req, res, next) => {
         title: true,
         id: true,
         description: true,
+        member: {
+          select: {
+            firstName: true,
+            lastName: true,
+            profilePicture: true,
+          },
+        },
+        comments: {
+          select: {
+            createdAt: true,
+            comment: true,
+            member: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
+        createdAt: true,
+      },
+    });
+
+    if (_post) {
+      res.status(200).send(_post);
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
+exports.searchPost = async (req, res, next) => {
+  try {
+    const { searchQuery } = req.body;
+
+    const _post = await prisma.post.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              contains: searchQuery,
+            },
+          },
+          {
+            description: {
+              contains: searchQuery,
+            },
+          },
+        ],
+      },
+      select: {
+        title: true,
+        id: true,
         member: {
           select: {
             firstName: true,

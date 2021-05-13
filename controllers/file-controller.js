@@ -33,6 +33,7 @@ exports.uploadSingleImage = (req, res, next) => {
 
           if (_file) {
             req.fileId = _file.id;
+
             next();
           }
         }

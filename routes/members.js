@@ -12,6 +12,7 @@ const {
   getMemberRoleById,
   getMemberBrowniePointsById,
   verifyMember,
+  updateMemberProfilePicture,
 } = require("../controllers/members-controller");
 const { membersValidator } = require("../validators/members-validator");
 const processValidations = require("../utilities/process-validations");
@@ -19,6 +20,7 @@ const {
   verifyToken,
   verifyIsAdmin,
 } = require("../controllers/auth-controller");
+const { uploadSingleImage } = require("../controllers/file-controller");
 var router = express.Router();
 
 router.get("/:id", verifyToken, getMemberById);
@@ -32,8 +34,7 @@ router.post(
 router.post(
   "/search",
   verifyIsAdmin,
-  membersValidator("searchMember"),
-  processValidations,
+
   searchMember
 );
 // Add verifyIsAdmin Middleware here after testing
@@ -53,4 +54,9 @@ router.put("/update-roles", verifyIsAdmin, updateMemberRoles);
 router.get("/status/:id", verifyToken, getMemberStatusById);
 router.post("/role", verifyToken, getMemberRoleById);
 router.get("/brownie-points/:id", verifyToken, getMemberBrowniePointsById);
+router.put(
+  "/update-profile-picture",
+  uploadSingleImage,
+  updateMemberProfilePicture
+);
 module.exports = router;
