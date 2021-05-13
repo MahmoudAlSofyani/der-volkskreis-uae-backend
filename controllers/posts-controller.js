@@ -60,6 +60,7 @@ exports.getAllPost = async (req, res, next) => {
               select: {
                 firstName: true,
                 lastName: true,
+                profilePicture: true,
               },
             },
           },
@@ -91,6 +92,7 @@ exports.getPostById = async (req, res, next) => {
           select: {
             firstName: true,
             lastName: true,
+            profilePicture: true,
           },
         },
         comments: {
