@@ -5,6 +5,11 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { membersValidator } = require("../validators/members-validator");
 const { PrismaDelete } = require("@paljs/plugins");
+const {
+  sendVerificationEmail,
+  sendAlertToAdmins,
+  sendApprovedEmail,
+} = require("../helpers/emailer/signup");
 
 const prisma = new PrismaClient();
 
@@ -85,6 +90,13 @@ exports.addNewMember = async (req, res, next) => {
     // TODO: Send email notification that new member has signed up
 
     if (_newMember) {
+      await sendVerificationEmail(
+        _newMember.firstName,
+        _newMember.emailAddress
+      );
+
+      await sendAlertToAdmins();
+
       return res.status(200).send({ message: "Account created successfully!" });
     }
   } catch (err) {
@@ -256,6 +268,10 @@ exports.updateMemberRoles = async (req, res, next) => {
     });
 
     if (_member) {
+      if (roleType === "verify") {
+        await sendApprovedEmail();
+      }
+
       res.status(200).send({ msg: "Member roles updated!" });
     }
   } catch (err) {
