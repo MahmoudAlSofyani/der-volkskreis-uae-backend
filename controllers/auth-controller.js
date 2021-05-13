@@ -18,6 +18,7 @@ const publicAttributes = {
   roles: true,
   events: true,
   browniePoints: true,
+  profilePicture: true,
 };
 exports.loginMember = async (req, res, next) => {
   try {

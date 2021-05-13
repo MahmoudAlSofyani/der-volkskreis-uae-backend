@@ -22,6 +22,7 @@ const publicAttributes = {
   roles: true,
   browniePoints: true,
   events: true,
+  profilePicture: true,
 };
 
 exports.addNewMember = async (req, res, next) => {
@@ -368,5 +369,30 @@ exports.updateMember = async (req, res, next) => {
     }
   } catch (err) {
     generatDefaultError(err, req, next);
+  }
+};
+
+exports.updateMemberProfilePicture = async (req, res, next) => {
+  try {
+    const { id } = req.body;
+    const { fileId } = req;
+
+    const _member = await prisma.member.update({
+      where: { id },
+      data: {
+        profilePicture: {
+          connect: {
+            id: fileId,
+          },
+        },
+      },
+      select: publicAttributes,
+    });
+
+    if (_member) {
+      res.status(200).send(_member);
+    }
+  } catch (err) {
+    console.log(err);
   }
 };

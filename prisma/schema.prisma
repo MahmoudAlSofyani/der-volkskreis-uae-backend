@@ -42,6 +42,8 @@ model Member {
   posts          Post[]
   eventStatuses  EventStatus[]
   adverts        Advertisement[]
+  profilePicture File?
+
 }
 
 model CarModel {
@@ -138,6 +140,8 @@ model File {
   filename        String
   advert          Advertisement? @relation(fields: [advertisementId], references: [id])
   advertisementId String?
+  member          Member?        @relation(fields: [memberId], references: [id])
+  memberId        String?
   type            String
 }
 
