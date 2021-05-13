@@ -124,12 +124,6 @@ exports.sendApprovedEmail = (firstName, emailAddress) => {
       message: {
         from: "Verification - Der Volkskreis UAE <verification@volkskreisuae.com>",
       },
-      preview: {
-        open: {
-          app: "chrome",
-          wait: false,
-        },
-      },
       transport: {
         host: process.env.MAILER_HOST,
         port: process.env.MAILER_PORT,
