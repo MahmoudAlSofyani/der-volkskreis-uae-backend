@@ -71,11 +71,10 @@ exports.sendVerificationEmail = (firstName, lastName, emailAddress) => {
 exports.sendAlertToAdmins = () => {
   try {
     const emailAddress = [
-      "danish.shakeel_m@hotmail.com",
-      "msafar95@hotmail.com",
-      "ahmed.h.alhosanii@gmail.com",
-      "abdulla.albakr@hotmail.com",
-      "nicola.bourji@gmail.com",
+      process.env.ADMIN_EMAIL_ONE,
+      process.env.ADMIN_EMAIL_TWO,
+      process.env.ADMIN_EMAIL_THREE,
+      process.env.ADMIN_EMAIL_FOUR,
     ];
 
     const email = new Email({
