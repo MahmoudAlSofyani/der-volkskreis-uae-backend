@@ -41,7 +41,7 @@ const attachments = [
   },
 ];
 
-exports.sendNewAnnouncementEmail = (emailAddresses) => {
+exports.sendNewEventEmail = (emailAddresses) => {
   try {
     const email = new Email({
       transport: transporter,
@@ -51,14 +51,14 @@ exports.sendNewAnnouncementEmail = (emailAddresses) => {
 
     email
       .send({
-        template: "announcement",
+        template: "events",
         message: {
           from: "Der Volkskreis UAE <info@volkskreisuae.com>",
           to: emailAddresses,
           attachments,
         },
         locals: {
-          title: "New Announcement",
+          title: "New Event",
         },
       })
       .catch((err) => console.log(err));

@@ -1,7 +1,12 @@
 const { PrismaClient } = require("@prisma/client");
-const { generateError, generatDefaultError } = require("../helpers/common");
+const {
+  generateError,
+  generatDefaultError,
+  getAllEmails,
+} = require("../helpers/common");
 const prisma = new PrismaClient();
 const moment = require("moment");
+const { sendNewEventEmail } = require("../helpers/emailer/events");
 
 // dont create a new event status if member and event id combination already exists
 
@@ -88,6 +93,10 @@ exports.createEvent = async (req, res, next) => {
     });
 
     if (newEvent) {
+      let emails = await getAllEmails();
+
+      await sendNewEventEmail(emails);
+
       res.status(200).send(newEvent);
     }
   } catch (err) {
