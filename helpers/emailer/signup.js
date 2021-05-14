@@ -1,55 +1,68 @@
 require("dotenv").config();
 
-const EmailTemplate = require("email-templates");
+const Email = require("email-templates");
+const nodemailer = require("nodemailer");
 
-exports.sendVerificationEmail = (firstName, emailAddress) => {
+const transporter = nodemailer.createTransport({
+  host: process.env.MAILER_HOST,
+  port: process.env.MAILER_PORT,
+  secure: true,
+  auth: {
+    user: process.env.MAILER_USER,
+    pass: process.env.MAILER_PASS,
+  },
+});
+
+const attachments = [
+  {
+    filename: "dvu-logo.png",
+    path: "./public/images/dvu-logo.png",
+    cid: "duv-logo",
+  },
+  {
+    filename: "instagram-icon.png",
+    path: "./public/icons/instagram-icon.png",
+    cid: "instagram",
+  },
+  {
+    filename: "3w.png",
+    path: "./public/images/3w.png",
+    cid: "3whealthcare",
+  },
+  {
+    filename: "alnaboodah1.png",
+    path: "./public/images/alnaboodah1.png",
+    cid: "vwdubai",
+  },
+  {
+    filename: "rowe.png",
+    path: "./public/images/rowe.png",
+    cid: "rowe",
+  },
+];
+
+exports.sendVerificationEmail = (firstName, lastName, emailAddress) => {
   try {
-    let emailToSend;
-
-    emailToSend = new EmailTemplate({
-      message: {
-        from: "Verification - Der Volkskreis UAE <verification@volkskreisuae.com>",
-      },
-      transport: {
-        host: process.env.MAILER_HOST,
-        port: process.env.MAILER_PORT,
-        secure: true,
-        auth: {
-          user: process.env.MAILER_USER,
-          pass: process.env.MAILER_PASS,
-        },
-        tls: {
-          rejectUnauthorized: false,
-        },
-      },
+    const email = new Email({
+      transport: transporter,
+      send: true,
+      preview: false,
     });
 
-    emailToSend
+    email
       .send({
         template: "signup",
         message: {
-          to: emailAddress,
-          attachments: [
-            {
-              filename: "dvu-logo.png",
-              path: "./public/images/dvu-logo.png",
-              cid: "duvlogo",
-            },
-            {
-              filename: "instagram-icon.png",
-              path: "./public/icons/instagram-icon.png",
-              cid: "instagram",
-            },
-          ],
+          from: "Der Volkskreis UAE <noreply@volkskreisuae.com>",
+          to: `${firstName} ${lastName} <${emailAddress}>`,
+          attachments,
         },
         locals: {
           title: "Verification Status - Der Volkskreis UAE",
           firstName,
         },
       })
-      .then((_email) => {
-        return _email;
-      });
+      .catch((err) => console.log(err));
   } catch (err) {
     console.log(err);
   }
@@ -57,8 +70,6 @@ exports.sendVerificationEmail = (firstName, emailAddress) => {
 
 exports.sendAlertToAdmins = () => {
   try {
-    let emailToSend;
-
     const emailAddress = [
       "danish.shakeel_m@hotmail.com",
       "msafar95@hotmail.com",
@@ -67,103 +78,53 @@ exports.sendAlertToAdmins = () => {
       "nicola.bourji@gmail.com",
     ];
 
-    emailToSend = new EmailTemplate({
-      message: {
-        from: "Verification - Der Volkskreis UAE <verification@volkskreisuae.com>",
-      },
-      transport: {
-        host: process.env.MAILER_HOST,
-        port: process.env.MAILER_PORT,
-        secure: true,
-        auth: {
-          user: process.env.MAILER_USER,
-          pass: process.env.MAILER_PASS,
-        },
-        tls: {
-          rejectUnauthorized: false,
-        },
-      },
+    const email = new Email({
+      transport: transporter,
+      send: true,
+      preview: false,
     });
 
-    emailToSend
+    email
       .send({
         template: "signup-admin",
         message: {
-          to: "admin@volkskreisuae",
+          from: "Der Volkskreis UAE <noreply@volkskreisuae.com>",
+          to: "DVU Admin <admin@volkskreisuae.com>",
           bcc: emailAddress,
-          attachments: [
-            {
-              filename: "dvu-logo.png",
-              path: "./public/images/dvu-logo.png",
-              cid: "duvlogo",
-            },
-            {
-              filename: "instagram-icon.png",
-              path: "./public/icons/instagram-icon.png",
-              cid: "instagram",
-            },
-          ],
+          attachments,
         },
         locals: {
           title: "Verification Pending - Der Volkskreis UAE",
         },
       })
-      .then((_email) => {
-        return _email;
-      });
+      .catch((err) => console.log(err));
   } catch (err) {
     console.log(err);
   }
 };
 
-exports.sendApprovedEmail = (firstName, emailAddress) => {
+exports.sendApprovedEmail = (firstName, lastName, emailAddress) => {
   try {
-    let emailToSend;
-
-    emailToSend = new EmailTemplate({
-      message: {
-        from: "Verification - Der Volkskreis UAE <verification@volkskreisuae.com>",
-      },
-      transport: {
-        host: process.env.MAILER_HOST,
-        port: process.env.MAILER_PORT,
-        secure: true,
-        auth: {
-          user: process.env.MAILER_USER,
-          pass: process.env.MAILER_PASS,
-        },
-        tls: {
-          rejectUnauthorized: false,
-        },
-      },
+    const email = new Email({
+      transport: transporter,
+      send: true,
+      preview: false,
     });
 
-    emailToSend
+    email
       .send({
         template: "approved",
         message: {
-          to: emailAddress,
-          attachments: [
-            {
-              filename: "dvu-logo.png",
-              path: "./public/images/dvu-logo.png",
-              cid: "duvlogo",
-            },
-            {
-              filename: "instagram-icon.png",
-              path: "./public/icons/instagram-icon.png",
-              cid: "instagram",
-            },
-          ],
+          from: "Der Volkskreis UAE <noreply@volkskreisuae.com>",
+          to: `${firstName} ${lastName} <${emailAddress}>`,
+          attachments,
         },
         locals: {
-          title: "Verification Status - Der Volkskreis UAE",
+          title: "Congratulations - Der Volkskreis UAE",
           firstName,
         },
       })
-      .then((_email) => {
-        return _email;
-      });
+      .catch((err) => console.log(err));
   } catch (err) {
     console.log(err);
   }
