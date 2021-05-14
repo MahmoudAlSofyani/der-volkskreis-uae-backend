@@ -24,6 +24,6 @@ router.get("/plate-codes", getPlateCodes);
 router.get("/member-count", verifyIsAdmin, getActiveMemberCount);
 router.get("/member-count/inactive", verifyIsAdmin, getInactiveMemberCount);
 router.get("/members-unverified", verifyIsAdmin, getUnverifiedMembers);
-router.get("/file/:id", verifyToken, downloadFile);
+router.get("/file/:id", downloadFile);
 
 module.exports = router;
