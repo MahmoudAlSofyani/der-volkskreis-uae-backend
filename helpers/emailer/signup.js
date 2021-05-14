@@ -53,7 +53,7 @@ exports.sendVerificationEmail = (firstName, lastName, emailAddress) => {
       .send({
         template: "signup",
         message: {
-          from: "Der Volkskreis UAE <noreply@volkskreisuae.com>",
+          from: "Der Volkskreis UAE <info@volkskreisuae.com>",
           to: `${firstName} ${lastName} <${emailAddress}>`,
           attachments,
         },
@@ -88,7 +88,7 @@ exports.sendAlertToAdmins = () => {
       .send({
         template: "signup-admin",
         message: {
-          from: "Der Volkskreis UAE <noreply@volkskreisuae.com>",
+          from: "Der Volkskreis UAE <info@volkskreisuae.com>",
           to: "DVU Admin <admin@volkskreisuae.com>",
           bcc: emailAddress,
           attachments,
@@ -115,7 +115,7 @@ exports.sendApprovedEmail = (firstName, lastName, emailAddress) => {
       .send({
         template: "approved",
         message: {
-          from: "Der Volkskreis UAE <noreply@volkskreisuae.com>",
+          from: "Der Volkskreis UAE <info@volkskreisuae.com>",
           to: `${firstName} ${lastName} <${emailAddress}>`,
           attachments,
         },
