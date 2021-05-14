@@ -38,7 +38,7 @@ router.post(
   searchMember
 );
 // Add verifyIsAdmin Middleware here after testing
-router.get("/", getAllMembers);
+router.get("/", verifyToken, getAllMembers);
 
 router.delete(
   "/",
@@ -48,7 +48,7 @@ router.delete(
   deleteMember
 );
 
-router.patch("/", updateMember);
+router.patch("/", verifyToken, updateMember);
 
 router.put("/update-roles", verifyIsAdmin, updateMemberRoles);
 router.get("/status/:id", verifyToken, getMemberStatusById);
@@ -56,6 +56,7 @@ router.post("/role", verifyToken, getMemberRoleById);
 router.get("/brownie-points/:id", verifyToken, getMemberBrowniePointsById);
 router.put(
   "/update-profile-picture",
+  verifyToken,
   uploadSingleImage,
   updateMemberProfilePicture
 );
