@@ -1,9 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const {
-  generateError,
-  generatDefaultError,
-  imagesFileFilter,
-} = require("../helpers/common");
+const { generatDefaultError, imagesFileFilter } = require("../helpers/common");
 const prisma = new PrismaClient();
 const moment = require("moment");
 const multer = require("multer");
@@ -40,17 +36,13 @@ exports.uploadSingleImage = (req, res, next) => {
       }
     });
   } catch (err) {
-    console.log(err);
+    generatDefaultError(err, req, next);
   }
 };
 
 exports.downloadFile = async (req, res, next) => {
   try {
     let { id } = req.params;
-
-    // if (id.includes(".")) {
-    //   id = id.split(".")[0];
-    // }
 
     const path = `${__basedir}/uploads/${id}`;
     const stat = fs.statSync(path);

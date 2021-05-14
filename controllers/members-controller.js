@@ -1,9 +1,7 @@
 require("dotenv").config();
 const { PrismaClient } = require("@prisma/client");
-const { generateError, generatDefaultError } = require("../helpers/common");
+const { generatDefaultError } = require("../helpers/common");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const { membersValidator } = require("../validators/members-validator");
 const { PrismaDelete } = require("@paljs/plugins");
 const {
   sendVerificationEmail,
@@ -87,8 +85,6 @@ exports.addNewMember = async (req, res, next) => {
       },
     });
 
-    // TODO: Send email notification that new member has signed up
-
     if (_newMember) {
       await sendVerificationEmail(
         _newMember.firstName,
@@ -96,7 +92,7 @@ exports.addNewMember = async (req, res, next) => {
         _newMember.emailAddress
       );
 
-      await sendAlertToAdmins();
+      // await sendAlertToAdmins();
 
       return res.status(200).send({ message: "Account created successfully!" });
     }
@@ -280,7 +276,7 @@ exports.updateMemberRoles = async (req, res, next) => {
       res.status(200).send({ msg: "Member roles updated!" });
     }
   } catch (err) {
-    console.log(err);
+    generatDefaultError(err, req, next);
   }
 };
 
@@ -414,6 +410,6 @@ exports.updateMemberProfilePicture = async (req, res, next) => {
       res.status(200).send(_member);
     }
   } catch (err) {
-    console.log(err);
+    generatDefaultError(err, req, next);
   }
 };

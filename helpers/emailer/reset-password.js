@@ -41,7 +41,12 @@ const attachments = [
   },
 ];
 
-exports.sendNewEventEmail = (emailAddresses) => {
+exports.sendResetPasswordEmail = (
+  firstName,
+  lastName,
+  emailAddress,
+  password
+) => {
   try {
     const email = new Email({
       transport: transporter,
@@ -51,14 +56,16 @@ exports.sendNewEventEmail = (emailAddresses) => {
 
     email
       .send({
-        template: "events",
+        template: "reset-password",
         message: {
           from: "Der Volkskreis UAE <info@volkskreisuae.com>",
-          to: emailAddresses,
+          to: `${firstName} ${lastName} <${emailAddress}>`,
           attachments,
         },
         locals: {
-          title: "New Event",
+          title: "Password Reset - Der Volkskreis UAE",
+          firstName,
+          password,
         },
       })
       .catch((err) => console.log(err));

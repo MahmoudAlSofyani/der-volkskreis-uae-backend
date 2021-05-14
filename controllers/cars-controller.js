@@ -1,6 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const { generateError, generatDefaultError } = require("../helpers/common");
+const { generatDefaultError } = require("../helpers/common");
 
 exports.updateCar = async (req, res, next) => {
   try {
@@ -19,7 +19,7 @@ exports.updateCar = async (req, res, next) => {
       res.status(200).send(_car);
     }
   } catch (err) {
-    generateError(err, req, next);
+    generatDefaultError(err, req, next);
   }
 };
 
@@ -57,6 +57,6 @@ exports.addNewCar = async (req, res, next) => {
       res.status(200).send(_member.cars);
     }
   } catch (err) {
-    generateError(err, req, next);
+    generatDefaultError(err, req, next);
   }
 };

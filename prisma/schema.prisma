@@ -43,6 +43,7 @@ model Member {
   eventStatuses  EventStatus[]
   adverts        Advertisement[]
   profilePicture File?
+  firstLogin     Boolean         @default(false)
 
 }
 

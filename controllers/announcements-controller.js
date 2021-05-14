@@ -1,9 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const {
-  generateError,
-  generatDefaultError,
-  getAllEmails,
-} = require("../helpers/common");
+const { generatDefaultError, getAllEmails } = require("../helpers/common");
 const {
   sendNewAnnouncementEmail,
 } = require("../helpers/emailer/announcements");
