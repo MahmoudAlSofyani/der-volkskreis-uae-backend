@@ -40,6 +40,10 @@ body {
   width: 20px;
 }
 
+.link {
+  width: 50px;
+}
+
 .logo {
   max-width: 130px;
 }

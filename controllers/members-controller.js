@@ -92,6 +92,7 @@ exports.addNewMember = async (req, res, next) => {
     if (_newMember) {
       await sendVerificationEmail(
         _newMember.firstName,
+        _newMember.lastName,
         _newMember.emailAddress
       );
 
@@ -269,7 +270,11 @@ exports.updateMemberRoles = async (req, res, next) => {
 
     if (_member) {
       if (roleType === "verify") {
-        await sendApprovedEmail();
+        await sendApprovedEmail(
+          _member.firstName,
+          _member.lastName,
+          _member.emailAddress
+        );
       }
 
       res.status(200).send({ msg: "Member roles updated!" });
