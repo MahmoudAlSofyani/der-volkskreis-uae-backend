@@ -6,13 +6,17 @@ const {
   getAllAdvertisements,
   deleteAdvertisement,
 } = require("../controllers/advertisements-controller");
+const {
+  verifyToken,
+  verifyIsAdmin,
+} = require("../controllers/auth-controller");
 const { uploadSingleImage } = require("../controllers/file-controller");
 var router = express.Router();
 
-router.post("/", uploadSingleImage, createAdvertisement);
-router.put("/", updateAdvertisementVerificationStatus);
-router.put("/status", updateAdvertisementStatus);
-router.get("/:isVerified", getAllAdvertisements);
-router.delete("/:id", deleteAdvertisement);
+router.post("/", verifyToken, uploadSingleImage, createAdvertisement);
+router.put("/", verifyIsAdmin, updateAdvertisementVerificationStatus);
+router.put("/status", verifyToken, updateAdvertisementStatus);
+router.get("/:isVerified", verifyToken, getAllAdvertisements);
+router.delete("/:id", verifyIsAdmin, deleteAdvertisement);
 
 module.exports = router;

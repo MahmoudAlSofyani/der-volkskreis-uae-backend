@@ -1,4 +1,5 @@
 var express = require("express");
+const { verifyToken } = require("../controllers/auth-controller");
 const {
   createPost,
   getAllPost,
@@ -7,9 +8,9 @@ const {
 } = require("../controllers/posts-controller");
 var router = express.Router();
 
-router.get("/", getAllPost);
-router.get("/:id", getPostById);
-router.post("/", createPost);
-router.post("/search", searchPost);
+router.get("/", verifyToken, getAllPost);
+router.get("/:id", verifyToken, getPostById);
+router.post("/", verifyToken, createPost);
+router.post("/search", verifyToken, searchPost);
 
 module.exports = router;

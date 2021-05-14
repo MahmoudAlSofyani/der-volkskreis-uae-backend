@@ -22,6 +22,6 @@ router.post("/", verifyIsAdmin, createEvent);
 router.post("/register", verifyToken, registerForEvent);
 router.post("/check", verifyToken, checkIfMemberIsRegisteredForEventById);
 router.patch("/", verifyIsAdmin, editEvent);
-router.put("/status", updateEventStatus);
+router.put("/status", verifyIsAdmin, updateEventStatus);
 
 module.exports = router;
