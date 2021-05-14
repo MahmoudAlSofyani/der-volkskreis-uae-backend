@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const { generateError, generatDefaultError } = require("../helpers/common");
+const { generatDefaultError } = require("../helpers/common");
 const prisma = new PrismaClient();
 
 exports.createAdvertisement = async (req, res, next) => {
@@ -29,7 +29,7 @@ exports.createAdvertisement = async (req, res, next) => {
       res.status(200).send(_advertisment);
     }
   } catch (err) {
-    console.log(err);
+    generatDefaultError(err, req, next);
   }
 };
 
@@ -62,7 +62,7 @@ exports.updateAdvertisementVerificationStatus = async (req, res, next) => {
       }
     }
   } catch (err) {
-    console.log(err);
+    generatDefaultError(err, req, next);
   }
 };
 
@@ -81,7 +81,7 @@ exports.updateAdvertisementStatus = async (req, res, next) => {
       res.status(200).send(_advertisment);
     }
   } catch (err) {
-    console.log(err);
+    generatDefaultError(err, req, next);
   }
 };
 
@@ -97,7 +97,7 @@ exports.deleteAdvertisement = async (req, res, next) => {
       res.status(200).send(_advertisment);
     }
   } catch (err) {
-    console.log(err);
+    generatDefaultError(err, req, next);
   }
 };
 
@@ -135,6 +135,6 @@ exports.getAllAdvertisements = async (req, res, next) => {
       res.status(200).send(_advertisements);
     }
   } catch (err) {
-    console.log(err);
+    generatDefaultError(err, req, next);
   }
 };

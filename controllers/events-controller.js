@@ -1,9 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const {
-  generateError,
-  generatDefaultError,
-  getAllEmails,
-} = require("../helpers/common");
+const { generatDefaultError, getAllEmails } = require("../helpers/common");
 const prisma = new PrismaClient();
 const moment = require("moment");
 const { sendNewEventEmail } = require("../helpers/emailer/events");
@@ -227,6 +223,6 @@ exports.updateEventStatus = async (req, res, next) => {
       }
     }
   } catch (err) {
-    console.log(err);
+    generatDefaultError(err, req, next);
   }
 };

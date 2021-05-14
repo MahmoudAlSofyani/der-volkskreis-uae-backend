@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const { generatDefaultError, generateError } = require("../helpers/common");
+const { generatDefaultError } = require("../helpers/common");
 const prisma = new PrismaClient();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");

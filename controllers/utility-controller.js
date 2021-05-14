@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const { generateError, generatDefaultError } = require("../helpers/common");
+const { generatDefaultError } = require("../helpers/common");
 const prisma = new PrismaClient();
 
 const publicAttributes = {
@@ -121,7 +121,6 @@ exports.getActiveMemberCount = async (req, res, next) => {
 
 exports.getInactiveMemberCount = async (req, res, next) => {
   try {
-
     const _members = await prisma.member.count({
       where: {
         roles: {
@@ -154,6 +153,6 @@ exports.getUnverifiedMembers = async (req, res, next) => {
       res.status(200).send(_members);
     }
   } catch (err) {
-    console.log(err);
+    generatDefaultError(err, req, next);
   }
 };
