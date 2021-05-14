@@ -96,7 +96,7 @@ exports.addNewMember = async (req, res, next) => {
         _newMember.emailAddress
       );
 
-      await sendAlertToAdmins();
+      // await sendAlertToAdmins();
 
       return res.status(200).send({ message: "Account created successfully!" });
     }
