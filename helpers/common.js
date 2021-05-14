@@ -1,3 +1,6 @@
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
+
 exports.generateError = (message, req, next) => {
   const error = new Error();
   error.message = message;
@@ -21,6 +24,24 @@ exports.imagesFileFilter = (req, file, cb) => {
     }
 
     cb(null, true);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.getAllEmails = async () => {
+  try {
+    const _emails = await prisma.member.findMany();
+
+    if (_emails) {
+      let _emailAddresses = [];
+
+      _emails.forEach((_email) => {
+        _emailAddresses.push(_email.emailAddress);
+      });
+
+      return _emailAddresses;
+    }
   } catch (err) {
     console.log(err);
   }

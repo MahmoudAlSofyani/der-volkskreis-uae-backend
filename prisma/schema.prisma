@@ -89,7 +89,7 @@ model Event {
   date          DateTime
   meetingPoint  String
   meetingTime   String
-  details       String
+  details       String        @db.Text
   members       Member[]
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
@@ -108,7 +108,7 @@ model EventStatus {
 model Announcement {
   id        String   @id @default(uuid())
   title     String
-  details   String
+  details   String   @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -117,7 +117,7 @@ model Post {
   id          String    @id @default(uuid())
   title       String
   comments    Comment[]
-  description String    @default("")
+  description String    @db.Text
   member      Member    @relation(fields: [memberId], references: [id])
   memberId    String
   createdAt   DateTime  @default(now())
@@ -149,7 +149,7 @@ model Advertisement {
   id          String  @id @default(uuid())
   price       Decimal
   title       String
-  description String
+  description String  @db.Text
   verified    Boolean @default(false)
   sold        Boolean @default(false)
   image       File?

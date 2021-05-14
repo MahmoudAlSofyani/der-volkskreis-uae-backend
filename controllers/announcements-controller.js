@@ -1,5 +1,12 @@
 const { PrismaClient } = require("@prisma/client");
-const { generateError, generatDefaultError } = require("../helpers/common");
+const {
+  generateError,
+  generatDefaultError,
+  getAllEmails,
+} = require("../helpers/common");
+const {
+  sendNewAnnouncementEmail,
+} = require("../helpers/emailer/announcements");
 const prisma = new PrismaClient();
 
 exports.getAllAnnouncements = async (req, res, next) => {
@@ -41,6 +48,10 @@ exports.createAnnouncement = async (req, res, next) => {
     });
 
     if (_newAnnouncement) {
+      let emailAddresses = await getAllEmails();
+
+      await sendNewAnnouncementEmail(emailAddresses);
+
       res.status(200).send(_newAnnouncement);
     }
   } catch (err) {
