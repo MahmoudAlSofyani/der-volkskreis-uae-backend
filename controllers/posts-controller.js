@@ -89,9 +89,13 @@ exports.getPostById = async (req, res, next) => {
             firstName: true,
             lastName: true,
             profilePicture: true,
+            id: true,
           },
         },
         comments: {
+          orderBy: {
+            createdAt: "desc",
+          },
           select: {
             createdAt: true,
             comment: true,
@@ -99,6 +103,7 @@ exports.getPostById = async (req, res, next) => {
               select: {
                 firstName: true,
                 lastName: true,
+                id: true,
               },
             },
           },
