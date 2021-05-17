@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE `Comment` MODIFY `Comment` TEXT NOT NULL;
+ALTER TABLE `comment` MODIFY `comment` TEXT NOT NULL;
