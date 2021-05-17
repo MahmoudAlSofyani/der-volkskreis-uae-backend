@@ -53,7 +53,7 @@ exports.addNewMember = async (req, res, next) => {
       plateEmirate,
       plateCode,
       plateNumber,
-      vinNumber,
+      vinNumber: vinNumber.toUpperCase(),
     };
 
     const _existingMember = await prisma.member.findFirst({
