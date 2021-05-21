@@ -112,6 +112,9 @@ exports.getAllAdvertisements = async (req, res, next) => {
       where: {
         verified: booleanQuery,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
       select: {
         member: {
           select: {

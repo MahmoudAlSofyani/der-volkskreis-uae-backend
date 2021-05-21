@@ -147,13 +147,14 @@ model File {
 }
 
 model Advertisement {
-  id          String  @id @default(uuid())
+  id          String   @id @default(uuid())
   price       Decimal
   title       String
-  description String  @db.Text
-  verified    Boolean @default(false)
-  sold        Boolean @default(false)
+  description String   @db.Text
+  verified    Boolean  @default(false)
+  sold        Boolean  @default(false)
   image       File?
-  member      Member  @relation(fields: [memberId], references: [id])
+  member      Member   @relation(fields: [memberId], references: [id])
   memberId    String
+  createdAt   DateTime @default(now())
 }
