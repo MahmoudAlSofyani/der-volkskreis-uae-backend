@@ -65,6 +65,87 @@ exports.loginMember = async (req, res, next) => {
   }
 };
 
+exports.loginSponsor = async (req, res, next) => {
+  try {
+    const { emailAddress, password } = req.body;
+
+    const _sponsor = await prisma.sponsor.findFirst({
+      where: { emailAddress },
+      select: {
+        firstName: true,
+        lastName: true,
+        emailAddress: true,
+        company: true,
+        password: true,
+        firstLogin: true,
+      },
+    });
+
+    if (_sponsor) {
+      const _passwordVerified = await bcrypt.compare(
+        password,
+        _sponsor.password
+      );
+
+      if (_passwordVerified) {
+        const _jwtPayload = {
+          id: _sponsor.id,
+        };
+
+        const _token = await jwt.sign(
+          {
+            exp: Math.floor(Date.now() / 1000) * (60 * 60),
+            data: _jwtPayload,
+          },
+          process.env.JWT_SECRET
+        );
+
+        let sponsorObj = {
+          firstName: _sponsor.firstName,
+          lastName: _sponsor.lastName,
+          emailAddress: _sponsor.emailAddress,
+          company: _sponsor.company,
+          firstLogin: _sponsor.firstLogin,
+        };
+
+        if (_token) {
+          res.status(200).send({ _token, sponsorObj });
+        }
+      }
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
+exports.verifySponsorToken = async (req, res, next) => {
+  try {
+    const { authorization } = req.headers;
+
+    if (authorization) {
+      const _token = authorization.split(" ")[1];
+
+      const _decodedPayload = await jwt.verify(_token, process.env.JWT_SECRET);
+
+      if (_decodedPayload) {
+        const { id } = _decodedPayload.data;
+        const _member = await prisma.sponsor.findUnique({
+          where: { id },
+          select: publicAttributes,
+        });
+
+        if (_member) {
+          next();
+        }
+      }
+    } else {
+      res.status(401).send({ msg: "Please log in first" });
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
 exports.verifyToken = async (req, res, next) => {
   try {
     const { authorization } = req.headers;

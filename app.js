@@ -13,6 +13,7 @@ var authRouter = require("./routes/auth");
 var postsRouter = require("./routes/posts");
 var commentsRouter = require("./routes/comments");
 var advertisementsRouter = require("./routes/advertisements");
+var sponsorsRouter = require("./routes/sponsors");
 var app = express();
 
 global.__basedir = __dirname;
@@ -55,5 +56,6 @@ app.use("/auth", authRouter);
 app.use("/posts", postsRouter);
 app.use("/comments", commentsRouter);
 app.use("/advertisements", advertisementsRouter);
+app.use("/sponsors", sponsorsRouter);
 
 module.exports = app;

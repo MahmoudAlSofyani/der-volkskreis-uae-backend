@@ -13,6 +13,7 @@ const {
   getActiveMemberCount,
   getInactiveMemberCount,
   getUnverifiedMembers,
+  getSponsorCount,
 } = require("../controllers/utility-controller");
 var router = express.Router();
 
@@ -25,5 +26,6 @@ router.get("/member-count", verifyIsAdmin, getActiveMemberCount);
 router.get("/member-count/inactive", verifyIsAdmin, getInactiveMemberCount);
 router.get("/members-unverified", verifyIsAdmin, getUnverifiedMembers);
 router.get("/file/:id", downloadFile);
+router.get("/sponsors-count", verifyIsAdmin, getSponsorCount);
 
 module.exports = router;

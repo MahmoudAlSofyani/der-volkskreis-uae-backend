@@ -47,6 +47,18 @@ model Member {
 
 }
 
+model Sponsor {
+  id           String   @id @default(uuid())
+  firstName    String
+  lastName     String
+  emailAddress String
+  mobileNumber String
+  password     String
+  createdAt    DateTime @default(now())
+  company      String
+  firstLogin   Boolean  @default(true)
+}
+
 model CarModel {
   id   Int    @id @default(autoincrement())
   name String
