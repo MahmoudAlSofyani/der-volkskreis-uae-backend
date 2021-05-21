@@ -131,6 +131,7 @@ exports.getAllAdvertisements = async (req, res, next) => {
         image: true,
         id: true,
         verified: true,
+        createdAt: true,
       },
     });
 
