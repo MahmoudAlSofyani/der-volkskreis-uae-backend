@@ -112,9 +112,6 @@ exports.getAllAdvertisements = async (req, res, next) => {
       where: {
         verified: booleanQuery,
       },
-      orderBy: {
-        createdAt: "desc",
-      },
       select: {
         member: {
           select: {
@@ -131,7 +128,6 @@ exports.getAllAdvertisements = async (req, res, next) => {
         image: true,
         id: true,
         verified: true,
-        createdAt: true,
       },
     });
 
