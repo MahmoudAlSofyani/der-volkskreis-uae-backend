@@ -7,7 +7,3 @@
 */
 -- AlterTable
 ALTER TABLE `advertisement` ADD COLUMN     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3);
-
--- AlterTable
-ALTER TABLE `comment` DROP COLUMN `Comment`,
-    ADD COLUMN     `comment` TEXT NOT NULL;
