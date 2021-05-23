@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE `sponsor` ADD COLUMN     `firstLogin` BOOLEAN NOT NULL DEFAULT true;
+ALTER TABLE `Sponsor` ADD COLUMN     `firstLogin` BOOLEAN NOT NULL DEFAULT true;
