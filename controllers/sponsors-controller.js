@@ -48,3 +48,12 @@ exports.createNewSponsor = async (req, res, next) => {
     generatDefaultError(err, req, next);
   }
 };
+
+/**
+ * TODO
+ *
+ * - Get all emails
+ * - Get all active members
+ * - Get all wolfsburg Members
+ * - Send email option
+ */

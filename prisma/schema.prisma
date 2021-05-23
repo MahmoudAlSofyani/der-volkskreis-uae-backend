@@ -133,6 +133,7 @@ model Post {
   description String    @db.Text
   member      Member    @relation(fields: [memberId], references: [id])
   memberId    String
+  urlSlug     String    @default("")
   createdAt   DateTime  @default(now())
 
 }
@@ -168,5 +169,6 @@ model Advertisement {
   image       File?
   member      Member   @relation(fields: [memberId], references: [id])
   memberId    String
+  urlSlug     String   @default("")
   createdAt   DateTime @default(now())
 }
