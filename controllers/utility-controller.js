@@ -156,3 +156,13 @@ exports.getUnverifiedMembers = async (req, res, next) => {
     generatDefaultError(err, req, next);
   }
 };
+
+exports.getSponsorCount = async (req, res, next) => {
+  try {
+    const _sponsors = await prisma.sponsor.count();
+
+    res.status(200).send({ count: _sponsors });
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};

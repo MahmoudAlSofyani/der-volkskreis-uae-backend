@@ -1,6 +1,6 @@
 require("dotenv").config();
 const { PrismaClient } = require("@prisma/client");
-const { generatDefaultError } = require("../helpers/common");
+const { generatDefaultError, urlSlug } = require("../helpers/common");
 
 const prisma = new PrismaClient();
 
@@ -26,6 +26,15 @@ exports.createPost = async (req, res, next) => {
     });
 
     if (_post) {
+      let generatedUrlSlug = urlSlug(_post.title, _post.id);
+
+      const _updatedPost = await prisma.post.update({
+        where: { id: _post.id },
+        data: {
+          urlSlug: generatedUrlSlug,
+        },
+      });
+
       res.status(200).send(_post);
     }
   } catch (err) {
@@ -42,6 +51,7 @@ exports.getAllPost = async (req, res, next) => {
       select: {
         title: true,
         id: true,
+        urlSlug: true,
         member: {
           select: {
             firstName: true,
@@ -84,6 +94,7 @@ exports.getPostById = async (req, res, next) => {
         title: true,
         id: true,
         description: true,
+        urlSlug: true,
         member: {
           select: {
             firstName: true,
@@ -142,6 +153,7 @@ exports.searchPost = async (req, res, next) => {
       select: {
         title: true,
         id: true,
+        urlSlug: true,
         member: {
           select: {
             firstName: true,

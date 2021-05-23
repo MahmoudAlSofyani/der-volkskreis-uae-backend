@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const { generatDefaultError } = require("../helpers/common");
+const { generatDefaultError, urlSlug } = require("../helpers/common");
 const prisma = new PrismaClient();
 
 exports.createAdvertisement = async (req, res, next) => {
@@ -26,6 +26,15 @@ exports.createAdvertisement = async (req, res, next) => {
     });
 
     if (_advertisment) {
+      let generatedUrlSlug = urlSlug(_advertisment.title, _advertisment.id);
+
+      const _updatedAdvertisement = await prisma.advertisement.update({
+        where: { id: _advertisment.id },
+        data: {
+          urlSlug: generatedUrlSlug,
+        },
+      });
+
       res.status(200).send(_advertisment);
     }
   } catch (err) {
@@ -112,6 +121,9 @@ exports.getAllAdvertisements = async (req, res, next) => {
       where: {
         verified: booleanQuery,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
       select: {
         member: {
           select: {
@@ -128,11 +140,47 @@ exports.getAllAdvertisements = async (req, res, next) => {
         image: true,
         id: true,
         verified: true,
+        urlSlug: true,
       },
     });
 
     if (_advertisements) {
       res.status(200).send(_advertisements);
+    }
+  } catch (err) {
+    generatDefaultError(err, req, next);
+  }
+};
+
+exports.getAdvertismentById = async (req, res, next) => {
+  try {
+    const { advertisementId } = req.params;
+
+    const _advertisement = await prisma.advertisement.findUnique({
+      where: { id: advertisementId },
+      select: {
+        member: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            mobileNumber: true,
+          },
+        },
+        price: true,
+        title: true,
+        description: true,
+        sold: true,
+        image: true,
+        id: true,
+        verified: true,
+        urlSlug: true,
+      },
+    });
+
+    if (_advertisement) {
+      console.log(_advertisement);
+      res.status(200).send(_advertisement);
     }
   } catch (err) {
     generatDefaultError(err, req, next);

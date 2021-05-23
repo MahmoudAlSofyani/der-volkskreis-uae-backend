@@ -46,3 +46,24 @@ exports.getAllEmails = async () => {
     console.log(err);
   }
 };
+
+exports.urlSlug = (title, id) => {
+  const DOMAIN_NAME = "https://volkskreisuae.com/";
+  const allowedLength = 255;
+  const remainingLength = allowedLength - DOMAIN_NAME.length - id.length;
+  let finalSlug;
+
+  let titlePart = title
+    .toLowerCase()
+    .replace(/[^\w ]+/g, "")
+    .replace(/ +/g, "-");
+
+  let idPart = id + "-";
+
+  finalSlug = idPart + titlePart;
+
+  if (finalSlug.length > remainingLength) {
+    finalSlug = finalSlug.substring(0, remainingLength - 1);
+  }
+  return finalSlug;
+};
