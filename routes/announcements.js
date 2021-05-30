@@ -13,7 +13,7 @@ const {
 var router = express.Router();
 
 router.get("/", verifyToken, getAllAnnouncements);
-router.get("/:eventId", verifyToken, getAnnouncementById);
+router.get("/:announcementId", verifyToken, getAnnouncementById);
 router.post("/", verifyIsAdmin, createAnnouncement);
 router.patch("/", verifyIsAdmin, editAnnouncement);
 router.delete("/", verifyIsAdmin, deleteAnnouncement);

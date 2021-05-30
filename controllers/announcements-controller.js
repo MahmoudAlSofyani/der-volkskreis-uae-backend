@@ -19,9 +19,9 @@ exports.getAllAnnouncements = async (req, res, next) => {
 
 exports.getAnnouncementById = async (req, res, next) => {
   try {
-    const { eventId } = req.params;
+    const { announcementId } = req.params;
     const _announcement = await prisma.announcement.findUnique({
-      where: { id: eventId },
+      where: { id: announcementId },
     });
 
     if (_announcement) {
